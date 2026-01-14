@@ -1,8 +1,8 @@
-package com.panomc.plugins.boilerplate
+package com.panomc.plugins.comments
 
 import com.panomc.platform.api.PanoPlugin
 
-class BoilerplatePlugin : PanoPlugin() {
+class CommentsPlugin : PanoPlugin() {
     override suspend fun onStart() {
         logger.info("Starting...")
     }
