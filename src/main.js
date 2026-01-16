@@ -1,6 +1,7 @@
-import { PanoPlugin } from "@panomc/sdk";
+import { PanoPlugin, viewComponent } from "@panomc/sdk";
 import { derived } from "svelte/store";
 import { _ as i18n } from "@panomc/sdk/utils/language";
+import ApiUtil from "@panomc/sdk/utils/api";
 
 const pluginId = "pano-plugin-comments"
 
@@ -16,9 +17,75 @@ export default class PanoPluginComments extends PanoPlugin {
     console.log("Hello world! It is enabled, environment:" + pano.isPanel)
 
     if (pano.isPanel) {
-      // here you can write your panel-related codes
+      pano.ui.page.register({
+        path: '/posts/comments',
+        component: viewComponent(() => import('./panel/CommentsPage.svelte')),
+        systemLayout: 'PostsLayout',
+        resetLayout: false,
+      });
+
+      pano.ui.posts.editMenu(async (items) => {
+        items.push({
+          href: '/posts/comments',
+          text: `plugins.${pluginId}.pages.comments.title`,
+        });
+        return items;
+      });
+
+      pano.ui.posts.onLoad(async (data, event) => {
+        const postIds = data.posts.map(p => p.id).filter(id => id > 0);
+        if (postIds.length === 0) return;
+
+        try {
+          const res = await ApiUtil.get({
+            path: `/api/panel/comment/post-counts?postIds=${postIds.join(",")}`,
+            request: event
+          });
+          data.commentCounts = res.counts || {};
+        } catch (e) {
+          console.error("Failed to load comment counts", e);
+          data.commentCounts = {};
+        }
+      });
+
+      pano.ui.hook.register({
+        name: 'panel:post-editor:content:bottom',
+        component: viewComponent(() => import('./panel/components/view/PostComments.svelte')),
+      });
+
+      pano.ui.hook.register({
+        name: 'panel:posts:table:header:after-views',
+        component: viewComponent(() => import('./panel/components/view/PostTableHeaderCommentCount.svelte')),
+      });
+
+      pano.ui.hook.register({
+        name: 'panel:posts:table:row:after-views',
+        component: viewComponent(() => import('./panel/components/view/PostTableRowCommentCount.svelte')),
+      });
     } else {
       // here you can write your theme-related codes
+      pano.ui.post.onLoad(async (data, event) => {
+        if (!data.post || data.post.id <= 0) return;
+
+        const url = new URL(event.url);
+        const page = url.searchParams.get('commentsPage') || 1;
+
+        try {
+          const res = await ApiUtil.get({
+            path: `/api/comments/${data.post.id}?page=${page}`,
+            request: event
+          });
+          data.post.commentData = {...res, page};
+        } catch (e) {
+          console.error("Failed to load comments", e);
+          data.post.commentData = {};
+        }
+      });
+
+      pano.ui.hook.register({
+        name: 'theme:post-detail:bottom',
+        component: viewComponent(() => import('./theme/components/view/ThemePostComments.svelte')),
+      });
     }
   }
 

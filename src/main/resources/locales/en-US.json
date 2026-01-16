@@ -1,3 +1,48 @@
 {
-  "hello-world": "Hello world!"
+  "pages": {
+    "comments": {
+      "title": "Comments",
+      "table-title": "Total {commentCount} comments",
+      "table": {
+        "id": "ID",
+        "author": "Author",
+        "comment": "Comment",
+        "likes": "Likes",
+        "replies": "Replies",
+        "date": "Date",
+        "actions": "Actions",
+        "post-id": "Post: #{postId}",
+        "delete": "Delete",
+        "no-comments": "No comments yet.",
+        "load-more-replies": "Load more replies ({count})"
+      }
+    }
+  },
+  "components": {
+    "comments": {
+      "placeholder": "Share your comment...",
+      "send": "Send",
+      "just-now": "Just now",
+      "n-minutes-ago": "{count} minutes ago",
+      "count": "Comments ({count})",
+      "reply": "Reply",
+      "like": "Like",
+      "reply-placeholder": "Write your reply...",
+      "login-required": "You must log in to comment.",
+      "load-more-replies": "Load more replies ({count})",
+      "no-comments": "No comments yet. Be the first to comment!",
+      "modals": {
+        "delete": {
+          "title": "Delete Comment",
+          "description": "Are you sure you want to permanently delete this comment?",
+          "confirm": "Yes",
+          "cancel": "Cancel"
+        }
+      }
+    }
+  },
+  "toasts": {
+    "add-success": "Comment added successfully.",
+    "delete-success": "Comment deleted successfully."
+  }
 }

@@ -1,3 +1,48 @@
 {
-  "hello-world": "Merhaba dünya!"
+  "pages": {
+    "comments": {
+      "title": "Yorumlar",
+      "table-title": "Toplam {commentCount} yorum",
+      "table": {
+        "id": "ID",
+        "author": "Yazar",
+        "comment": "Yorum",
+        "likes": "Beğeni",
+        "replies": "Yanıt",
+        "date": "Tarih",
+        "actions": "Eylemler",
+        "post-id": "Yazı: #{postId}",
+        "delete": "Sil",
+        "no-comments": "Henüz yorum yapılmamış.",
+        "load-more-replies": "Daha fazla yanıt yükle ({count})"
+      }
+    }
+  },
+  "components": {
+    "comments": {
+      "placeholder": "Yorumunuzu paylaşın...",
+      "send": "Gönder",
+      "just-now": "Az önce",
+      "n-minutes-ago": "{count} dakika önce",
+      "count": "Yorumlar ({count})",
+      "reply": "Yanıtla",
+      "like": "Beğen",
+      "reply-placeholder": "Yanıtınızı yazın...",
+      "login-required": "Yorum yapmak için giriş yapmalısınız.",
+      "load-more-replies": "Daha fazla yanıt yükle ({count})",
+      "no-comments": "Henüz yorum yapılmamış. İlk yorumu sen yap!",
+      "modals": {
+        "delete": {
+          "title": "Yorumu Sil",
+          "description": "Bu yorumu kalıcı olarak silmek istediğinize emin misiniz?",
+          "confirm": "Evet",
+          "cancel": "İptal"
+        }
+      }
+    }
+  },
+  "toasts": {
+    "add-success": "Yorum başarıyla eklendi.",
+    "delete-success": "Yorum başarıyla silindi."
+  }
 }
