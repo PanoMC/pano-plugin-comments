@@ -58,7 +58,7 @@ class GetCommentsAPI(
         val resultComments = run {
             val commentsWithReplies = comments.map { it to commentDao.getRepliesByParentId(it.id, null, 3, sqlClient) }
             val allUserIds = (comments.mapNotNull { it.userId } + commentsWithReplies.flatMap { (_, r) -> r.mapNotNull { it.userId } }).toSet().toList()
-            val usernames = databaseManager.userDao.getUsernameByListOfId(allUserIds, sqlClient)
+            val usernames = if (allUserIds.isEmpty()) emptyMap() else databaseManager.userDao.getUsernameByListOfId(allUserIds, sqlClient)
 
             commentsWithReplies.map { (comment, replies) ->
                 val isLiked = if (userId != null) {

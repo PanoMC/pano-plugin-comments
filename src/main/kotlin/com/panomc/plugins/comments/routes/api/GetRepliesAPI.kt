@@ -53,7 +53,7 @@ class GetRepliesAPI(
 
         val resultReplies = run {
             val userIds = replies.mapNotNull { it.userId }.toSet().toList()
-            val usernames = databaseManager.userDao.getUsernameByListOfId(userIds, sqlClient)
+            val usernames = if (userIds.isEmpty()) emptyMap() else databaseManager.userDao.getUsernameByListOfId(userIds, sqlClient)
 
             replies.map { reply ->
                 var isLiked = false
