@@ -22,12 +22,14 @@ export default class PanoPluginComments extends PanoPlugin {
         component: viewComponent(() => import('./panel/CommentsPage.svelte')),
         systemLayout: 'PostsLayout',
         resetLayout: false,
+        permission: `pano.plugin.${pluginId}.manage.comments`,
       });
 
       pano.ui.posts.editMenu(async (items) => {
         items.push({
           href: '/posts/comments',
           text: `plugins.${pluginId}.pages.comments.title`,
+          permission: `pano.plugin.${pluginId}.manage.comments`,
         });
         return items;
       });
@@ -51,16 +53,19 @@ export default class PanoPluginComments extends PanoPlugin {
       pano.ui.hook.register({
         name: 'panel:post-editor:content:bottom',
         component: viewComponent(() => import('./panel/components/view/PostComments.svelte')),
+        permission: `pano.plugin.${pluginId}.manage.comments`,
       });
 
       pano.ui.hook.register({
         name: 'panel:posts:table:header:after-views',
         component: viewComponent(() => import('./panel/components/view/PostTableHeaderCommentCount.svelte')),
+        permission: `pano.plugin.${pluginId}.manage.comments`,
       });
 
       pano.ui.hook.register({
         name: 'panel:posts:table:row:after-views',
         component: viewComponent(() => import('./panel/components/view/PostTableRowCommentCount.svelte')),
+        permission: `pano.plugin.${pluginId}.manage.comments`,
       });
     } else {
       // here you can write your theme-related codes
@@ -75,7 +80,7 @@ export default class PanoPluginComments extends PanoPlugin {
             path: `/api/comments/${data.post.id}?page=${page}`,
             request: event
           });
-          data.post.commentData = {...res, page};
+          data.post.commentData = { ...res, page };
         } catch (e) {
           console.error("Failed to load comments", e);
           data.post.commentData = {};
