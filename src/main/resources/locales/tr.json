@@ -44,5 +44,11 @@
   "toasts": {
     "add-success": "Yorum başarıyla eklendi.",
     "delete-success": "Yorum başarıyla silindi."
+  },
+  "permissions": {
+    "MANAGE_COMMENTS": {
+      "title": "Yorumları Yönet",
+      "description": "Yorumları görüntüleyebilir ve silebilir."
+    }
   }
 }

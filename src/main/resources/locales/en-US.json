@@ -44,5 +44,11 @@
   "toasts": {
     "add-success": "Comment added successfully.",
     "delete-success": "Comment deleted successfully."
+  },
+  "permissions": {
+    "MANAGE_COMMENTS": {
+      "title": "Manage Comments",
+      "description": "Can view and delete comments."
+    }
   }
 }
