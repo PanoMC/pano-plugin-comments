@@ -1,8 +1,8 @@
 <script>
-  import { _ } from "../../../main.js";
-  import { Date } from "@panomc/sdk/components";
-  import { base } from "@panomc/sdk/svelte";
-  import ApiUtil, { buildQueryParams } from "@panomc/sdk/utils/api";
+  import {_} from "../../../main.js";
+  import {Date} from "@panomc/sdk/components";
+  import {base} from "@panomc/sdk/svelte";
+  import ApiUtil, {buildQueryParams} from "@panomc/sdk/utils/api";
 
   export let comment;
   export let onDelete;
@@ -113,7 +113,10 @@
             on:click={toggleReplies}
             disabled={loadingReplies}
           >
-            <i class="fas fa-caret-down me-2 caret-icon" class:open={showReplies}></i>
+            <i
+                    class="fas fa-caret-down me-2 caret-icon"
+                    class:open={showReplies}
+            ></i>
             {comment.replyCount}
             {$_("pages.comments.table.replies") || "Yanıt"}
           </button>
@@ -131,7 +134,10 @@
 
 {#if showReplies}
   {#each replies as reply, i (reply.id)}
-    <tr class="reply-row" class:last-reply={i === replies.length - 1}>
+    <tr
+            class="reply-row"
+            class:last-reply={i === replies.length - 1 && !repliesHasMore}
+    >
       <td class="align-middle">
         <div class="dropdown position-static">
           <button
@@ -198,7 +204,7 @@
     </tr>
   {/each}
   {#if repliesHasMore}
-    <tr class="reply-row">
+    <tr class="reply-row last-reply">
       <td colspan="2"></td>
       <td colspan="4">
         <button
