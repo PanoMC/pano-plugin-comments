@@ -14,11 +14,11 @@
         "post-id": "Post: #{postId}",
         "delete": "Delete",
         "no-comments": "No comments yet.",
-        "load-more-replies": "Load more replies ({count})",
         "copy-link": "Copy Link",
         "highlighted-comment": "Highlighted Comment",
         "hidden-replies-above": "{count} replies hidden above",
-        "hidden-replies-below": "{count} replies hidden below"
+        "hidden-replies-below": "{count} replies hidden below",
+        "load-more-replies": "Load More Replies ({count})"
       }
     }
   },
@@ -33,7 +33,7 @@
       "like": "Like",
       "reply-placeholder": "Write your reply...",
       "login-required": "You must log in to comment.",
-      "load-more-replies": "Load more replies ({count})",
+      "load-more-replies": "Load More Replies ({count})",
       "no-comments": "No comments yet. Be the first to comment!",
       "modals": {
         "delete": {

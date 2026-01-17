@@ -33,7 +33,7 @@
       "like": "Beğen",
       "reply-placeholder": "Yanıtınızı yazın...",
       "login-required": "Yorum yapmak için giriş yapmalısınız.",
-      "load-more-replies": "Daha fazla yanıt yükle ({count})",
+      "load-more-replies": "Daha Fazla Yanıt Yükle ({count})",
       "no-comments": "Henüz yorum yapılmamış. İlk yorumu sen yap!",
       "modals": {
         "delete": {
