@@ -1,15 +1,14 @@
 <script>
-    import { page } from "@panomc/sdk/svelte";
-    import { get } from "svelte/store";
-    import { _ } from "../../../main.js";
-    import { Pagination } from "@panomc/sdk/components";
-    import ApiUtil, { buildQueryParams } from "@panomc/sdk/utils/api";
-    import ConfirmDeleteCommentModal from "../modals/ConfirmDeleteCommentModal.svelte";
-    import {
-        show as showDeleteModal,
+    import {page} from "@panomc/sdk/svelte";
+    import {get} from "svelte/store";
+    import {_} from "../../../main.js";
+    import {Pagination} from "@panomc/sdk/components";
+    import ApiUtil, {buildQueryParams} from "@panomc/sdk/utils/api";
+    import ConfirmDeleteCommentModal, {
         setCallback as setDeleteCallback,
+        show as showDeleteModal
     } from "../modals/ConfirmDeleteCommentModal.svelte";
-    import { showToast } from "@panomc/sdk/toasts";
+    import {showToast} from "@panomc/sdk/toasts";
     import ThemeCommentItem from "./ThemeCommentItem.svelte";
 
     // Props
@@ -123,7 +122,7 @@
                         p.replyCount = (p.replyCount || 0) + 1;
                         p.showReplyBox = false;
                         p.replyContent = "";
-                        p.replies = [...(p.replies || []), newComment];
+                        p.replies = [newComment, ...(p.replies || [])];
                         p.repliesHasMore = p.replyCount > p.replies.length;
                         comments = [...comments]; // Trigger update
                     }
