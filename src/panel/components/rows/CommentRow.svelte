@@ -62,7 +62,7 @@
       >
         <button
           type="button"
-          class="dropdown-item text-danger"
+          class="dropdown-item"
           on:click={() => onDelete(comment.id)}
         >
           <i class="fas fa-trash me-2"></i>
