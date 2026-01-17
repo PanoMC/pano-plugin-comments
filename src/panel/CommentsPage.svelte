@@ -1,5 +1,5 @@
-<script module>
-    import ApiUtil, { buildQueryParams } from "@panomc/sdk/utils/api";
+<script context="module">
+    import ApiUtil, {buildQueryParams} from "@panomc/sdk/utils/api";
 
     export async function load(event) {
         const {
@@ -55,11 +55,11 @@
     setDeleteCommentModalCallback((id) => {
         let deletedFromReplies = false;
         const newComments = comments.map((c) => {
-            if (c.replies?.some((r) => r.id === id)) {
+            if (c.replies?.some((r) => r.id == id)) {
                 deletedFromReplies = true;
                 return {
                     ...c,
-                    replies: c.replies.filter((r) => r.id !== id),
+                    replies: c.replies.filter((r) => r.id != id),
                     replyCount: (c.replyCount || 1) - 1,
                 };
             }
@@ -71,11 +71,10 @@
             data = {
                 ...data,
                 comments: newComments,
-                commentCount: (data.commentCount || 1) - 1,
             };
         } else {
             const oldCount = comments.length;
-            const updatedComments = comments.filter((c) => c.id !== id);
+            const updatedComments = comments.filter((c) => c.id != id);
             if (updatedComments.length < oldCount) {
                 comments = updatedComments;
                 data = {
