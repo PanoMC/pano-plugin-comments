@@ -25,6 +25,7 @@
   "components": {
     "comments": {
       "placeholder": "Share your comment...",
+      "add-comment": "Add Comment",
       "send": "Send",
       "just-now": "Just now",
       "n-minutes-ago": "{count} minutes ago",

@@ -204,7 +204,7 @@
 
 <div
   id="pano-comments-section"
-  class="vstack gap-3 animate__animated animate__fadeIn w-50 mx-auto"
+  class="vstack gap-3 animate__animated animate__fadeIn pano-comments-container mx-auto"
 >
   <div class="text-center">
     <h4 class="mb-0">
@@ -219,9 +219,9 @@
   <!-- New Comment Modal Trigger -->
   {#if session?.user}
     <div class="d-flex justify-content-center">
-      <button class="btn btn-primary" on:click={showAddModal}>
+      <button class="btn btn-link text-decoration-none" on:click={showAddModal}>
         <i class="fas fa-plus me-2"></i>
-        {$_("components.comments.send")}
+        {$_("components.comments.add-comment")}
       </button>
     </div>
   {:else}
@@ -269,4 +269,13 @@
 <AddCommentModal />
 
 <style>
+  .pano-comments-container {
+    width: 100%;
+  }
+
+  @media (min-width: 992px) {
+    .pano-comments-container {
+      width: 50%;
+    }
+  }
 </style>

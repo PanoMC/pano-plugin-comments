@@ -25,6 +25,7 @@
   "components": {
     "comments": {
       "placeholder": "Yorumunuzu paylaşın...",
+      "add-comment": "Yorum Ekle",
       "send": "Gönder",
       "just-now": "Az önce",
       "n-minutes-ago": "{count} dakika önce",
