@@ -2,7 +2,7 @@
   "pages": {
     "comments": {
       "title": "Comments",
-      "table-title": "Total {commentCount} comments",
+      "table-title": "{commentCount} Comments",
       "table": {
         "id": "ID",
         "author": "Author",

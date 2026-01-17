@@ -2,7 +2,7 @@
   "pages": {
     "comments": {
       "title": "Yorumlar",
-      "table-title": "Toplam {commentCount} yorum",
+      "table-title": "{commentCount} Yorum",
       "table": {
         "id": "ID",
         "author": "Yazar",
