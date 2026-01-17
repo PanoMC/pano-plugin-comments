@@ -34,7 +34,10 @@
       "like": "Beğen",
       "reply-placeholder": "Yanıtınızı yazın...",
       "login-required": "Yorum yapmak için giriş yapmalısınız.",
+      "no-permission": "Yorum yapmak için yetkiniz yok.",
+      "closed": "Bu gönderi için yorumlar kapatıldı.",
       "load-more-replies": "Daha Fazla Yanıt Yükle ({count})",
+      "load-more": "Daha Fazla Yükle",
       "no-comments": "Henüz yorum yapılmamış. İlk yorumu sen yap!",
       "modals": {
         "delete": {
@@ -48,13 +51,37 @@
   },
   "toasts": {
     "add-success": "Yorum başarıyla eklendi.",
+    "add-error": "Yorum eklenirken bir hata oluştu.",
     "delete-success": "Yorum başarıyla silindi.",
-    "copy-success": "Bağlantı başarıyla kopyalandı!"
+    "copy-success": "Bağlantı başarıyla kopyalandı!",
+    "rate-limited": "Tekrar yorum yapmadan önce lütfen bekleyin."
   },
   "permissions": {
     "MANAGE_COMMENTS": {
       "title": "Yorumları Yönet",
       "description": "Yorumları görüntüleyebilir ve silebilir."
     }
+  },
+  "settings": {
+    "title": "Yorum Ayarları",
+    "replies-enabled": "Yanıtları Etkinleştir",
+    "replies-enabled-desc": "Kullanıcıların yorumlara yanıt vermesine izin ver",
+    "likes-enabled": "Beğenileri Etkinleştir",
+    "likes-enabled-desc": "Kullanıcıların yorumları beğenmesine izin ver",
+    "pagination-type": "Sayfalama Türü",
+    "pagination-classic": "Klasik Sayfalama",
+    "pagination-load-more": "Daha Fazla Yükle",
+    "comment-permission": "Yorum Yetkisi",
+    "comment-permission-desc": "Herkesin yorum yapabilmesi için boş bırakın",
+    "reply-permission": "Yanıt Yetkisi",
+    "reply-permission-desc": "Herkesin yanıt verebilmesi için boş bırakın",
+    "cooldown": "Bekleme Süresi (Saniye)",
+    "cooldown-desc": "Yorumlar arasındaki minimum süre (saniye cinsinden)",
+    "input-style": "Giriş Stili",
+    "input-style-modal": "Modal (Pencere)",
+    "input-style-inline": "Satır İçi (Inline)",
+    "comments-enabled": "Yorumları Etkinleştir",
+    "comments-enabled-success": "Yorumlar başarıyla etkinleştirildi.",
+    "comments-disabled-success": "Yorumlar başarıyla devre dışı bırakıldı."
   }
 }

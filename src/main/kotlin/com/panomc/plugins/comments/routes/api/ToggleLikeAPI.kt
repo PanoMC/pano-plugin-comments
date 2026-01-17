@@ -1,11 +1,14 @@
 package com.panomc.plugins.comments.routes.api
 
 import com.panomc.platform.annotation.Endpoint
+import com.panomc.platform.api.config.PluginConfigManager
 import com.panomc.platform.auth.AuthProvider
 import com.panomc.platform.db.DatabaseManager
+import com.panomc.platform.error.BadRequest
 import com.panomc.platform.error.NotFound
 import com.panomc.platform.model.*
 import com.panomc.plugins.comments.CommentsPlugin
+import com.panomc.plugins.comments.config.CommentsConfig
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.CommentLikeDao
 import com.panomc.plugins.comments.db.model.CommentLike
@@ -30,6 +33,10 @@ class ToggleLikeAPI(
         plugin.applicationContext.getBean(AuthProvider::class.java)
     }
 
+    private val configManager by lazy {
+        plugin.pluginBeanContext.getBean(PluginConfigManager::class.java) as PluginConfigManager<CommentsConfig>
+    }
+
     private val databaseManager by lazy {
         plugin.applicationContext.getBean(DatabaseManager::class.java)
     }
@@ -46,6 +53,10 @@ class ToggleLikeAPI(
             .build()
 
     override suspend fun handle(context: RoutingContext): Result {
+        if (!configManager.config.likesEnabled) {
+            return BadRequest()
+        }
+
         val commentId = context.body().asJsonObject().getLong("commentId")
 
         val sqlClient = databaseManager.getSqlClient()

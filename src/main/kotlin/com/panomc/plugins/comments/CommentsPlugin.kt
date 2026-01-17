@@ -1,7 +1,9 @@
 package com.panomc.plugins.comments
 
 import com.panomc.platform.api.PanoPlugin
+import com.panomc.platform.api.config.PluginConfigManager
 import com.panomc.platform.setup.SetupManager
+import com.panomc.plugins.comments.config.CommentsConfig
 
 class CommentsPlugin : PanoPlugin() {
     private val pluginDatabaseManager by lazy {
@@ -28,6 +30,9 @@ class CommentsPlugin : PanoPlugin() {
     internal suspend fun startPlugin() {
         if (isInitialized) return
         isInitialized = true
+
+        val configManager = PluginConfigManager(this, CommentsConfig::class.java)
+        pluginBeanContext.beanFactory.registerSingleton(PluginConfigManager::class.java.name, configManager)
 
         pluginDatabaseManager.initialize(this)
 

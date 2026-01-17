@@ -1,15 +1,20 @@
 package com.panomc.plugins.comments.routes.api
 
 import com.panomc.platform.annotation.Endpoint
+import com.panomc.platform.api.config.PluginConfigManager
 import com.panomc.platform.auth.AuthProvider
 import com.panomc.platform.auth.PermissionManager
 import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.error.BadRequest
+import com.panomc.platform.error.NoPermission
 import com.panomc.platform.error.NotFound
+import com.panomc.platform.error.RateLimited
 import com.panomc.platform.model.*
 import com.panomc.platform.util.PostStatus
 import com.panomc.plugins.comments.CommentsPlugin
+import com.panomc.plugins.comments.config.CommentsConfig
 import com.panomc.plugins.comments.db.dao.CommentDao
+import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import com.panomc.plugins.comments.db.model.Comment
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.RequestPredicate
@@ -22,7 +27,8 @@ import io.vertx.json.schema.common.dsl.Schemas.*
 @Endpoint
 class AddCommentAPI(
     private val plugin: CommentsPlugin,
-    private val commentDao: CommentDao
+    private val commentDao: CommentDao,
+    private val postCommentSettingsDao: PostCommentSettingsDao
 ) : LoggedInApi() {
     override val paths = listOf(Path("/api/comments", RouteType.POST))
 
@@ -32,6 +38,10 @@ class AddCommentAPI(
 
     private val permissionManager by lazy {
         plugin.applicationContext.getBean(PermissionManager::class.java)
+    }
+
+    private val configManager by lazy {
+        plugin.pluginBeanContext.getBean(PluginConfigManager::class.java) as PluginConfigManager<CommentsConfig>
     }
 
     private val databaseManager by lazy {
@@ -63,6 +73,11 @@ class AddCommentAPI(
             throw NotFound()
         }
 
+        val settings = postCommentSettingsDao.get(postId, sqlClient)
+        if (settings != null && !settings.enabled) {
+            throw NoPermission("Comments are disabled for this post")
+        }
+
         val userId = authProvider.getUserIdFromRoutingContext(context)
 
         val username = databaseManager.userDao.getUsernameFromUserId(userId, sqlClient)!!
@@ -70,9 +85,39 @@ class AddCommentAPI(
         val parentId = if (body.containsKey("parentId")) body.getLong("parentId") else null
 
         if (parentId != null) {
+            if (!configManager.config.repliesEnabled) {
+                return BadRequest()
+            }
+
+            if (configManager.config.replyPermission.isNotEmpty() && !permissionManager.hasPermissionNode(
+                    userId,
+                    configManager.config.replyPermission
+                )
+            ) {
+                throw NoPermission()
+            }
+
             val parentComment = commentDao.getById(parentId, sqlClient)
             if (parentComment == null || parentComment.parentId != null) {
                 return BadRequest()
+            }
+        } else {
+            if (configManager.config.commentPermission.isNotEmpty() && !permissionManager.hasPermissionNode(
+                    userId,
+                    configManager.config.commentPermission
+                )
+            ) {
+                throw NoPermission()
+            }
+        }
+
+        if (configManager.config.cooldown > 0) {
+            val lastComment = commentDao.getLastCommentByUserId(userId, sqlClient)
+            if (lastComment != null) {
+                val diff = System.currentTimeMillis() - lastComment.createdAt
+                if (diff < configManager.config.cooldown * 1000L) {
+                    throw RateLimited()
+                }
             }
         }
 

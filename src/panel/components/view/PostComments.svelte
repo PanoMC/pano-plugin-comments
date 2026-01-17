@@ -1,5 +1,6 @@
 <script context="module">
     import ApiUtil, {buildQueryParams} from "@panomc/sdk/utils/api";
+    import {_} from "../../../main.js";
 
     export async function load(event) {
         const {
@@ -31,7 +32,9 @@
                     comments: res.comments || [],
                     totalPage: res.totalPage || 1,
                     totalComments: res.totalComments || 0,
+                    totalComments: res.totalComments || 0,
                     currentPage: parseInt(page),
+                    commentsEnabled: res.commentsEnabled !== false,
                 },
             };
         } catch (e) {
@@ -56,10 +59,12 @@
         show as showDeleteCommentModal,
         setCallback as setDeleteCommentModalCallback,
     } from "../modals/ConfirmDeleteCommentModal.svelte";
+    import {showToast} from "@panomc/sdk/toasts";
 
     export let data;
 
     let comments = data.comments || [];
+    let commentsEnabled = data.commentsEnabled;
     let totalPage = data.totalPage || 1;
     let totalComments = data.totalComments || 0;
     let currentPage = data.currentPage || 1;
@@ -75,8 +80,30 @@
         totalPage = data.totalPage || 1;
         totalComments = data.totalComments || 0;
         currentPage = data.currentPage || 1;
+        currentPage = data.currentPage || 1;
+        commentsEnabled = data.commentsEnabled;
         refreshKey++;
     }
+
+    const toggleComments = async () => {
+        const oldState = commentsEnabled;
+        commentsEnabled = !commentsEnabled;
+        try {
+            await ApiUtil.put({
+                path: `/api/panel/comment/settings/${postId}`,
+                body: {enabled: commentsEnabled},
+            });
+            showToast(
+                commentsEnabled
+                    ? $_("settings.comments-enabled-success")
+                    : $_("settings.comments-disabled-success"),
+            );
+        } catch (e) {
+            console.error(e);
+            commentsEnabled = oldState;
+            showToast($_("components.toasts.settings-save-error"), "error");
+        }
+    };
 
     const deleteComment = (id) => {
         showDeleteCommentModal(id);
@@ -143,16 +170,41 @@
 </script>
 
 <div id="pano-comments-section">
-    {#key refreshKey}
-        <CommentTable
-            {comments}
-            commentCount={totalComments}
-            page={currentPage}
-            {totalPage}
-            onDelete={deleteComment}
-            {onPageClick}
-        />
-    {/key}
+    <div class="card mb-3">
+        <div
+                class="card-header d-flex justify-content-between align-items-center"
+        >
+            <h5 class="mb-0">
+                {$_("pages.comments.title", {default: "Comments"})}
+            </h5>
+            <div class="form-check form-switch mb-0">
+                <input
+                        checked={commentsEnabled}
+                        class="form-check-input"
+                        id="commentsEnabledSwitch"
+                        on:change={toggleComments}
+                        type="checkbox"
+                />
+                <label class="form-check-label" for="commentsEnabledSwitch">
+                    {$_("settings.comments-enabled", {
+                        default: "Enable Comments",
+                    })}
+                </label>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            {#key refreshKey}
+                <CommentTable
+                        {comments}
+                        commentCount={totalComments}
+                        page={currentPage}
+                        {totalPage}
+                        onDelete={deleteComment}
+                        {onPageClick}
+                />
+            {/key}
+        </div>
+    </div>
 </div>
 
 <ConfirmDeleteCommentModal />

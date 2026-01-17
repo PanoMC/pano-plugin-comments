@@ -73,6 +73,26 @@ export default class PanoPluginComments extends PanoPlugin {
         component: viewComponent(() => import('./panel/components/view/PlayerComments.svelte')),
         permission: `pano.plugin.${pluginId}.manage.comments`,
       });
+
+      pano.ui.addon.onLoad(async (data, event) => {
+        if (data.addon.id !== 'pano-plugin-comments') return;
+
+        try {
+          const config = await ApiUtil.get({
+            path: '/api/panel/comment/config',
+            request: event
+          });
+          data.addon.config = config;
+        } catch (e) {
+          console.error('[pano-plugin-comments] Failed to load config', e);
+        }
+      });
+
+      pano.ui.hook.register({
+        name: 'panel:plugin-detail:content',
+        component: viewComponent(() => import('./panel/components/view/CommentPluginSettings.svelte')),
+        permission: `pano.plugin.${pluginId}.manage.comments`,
+      });
     } else {
       // here you can write your theme-related codes
       pano.ui.post.onLoad(async (data, event) => {
@@ -82,13 +102,19 @@ export default class PanoPluginComments extends PanoPlugin {
         const page = url.searchParams.get('commentsPage') || 1;
 
         try {
-          const res = await ApiUtil.get({
-            path: `/api/comments/${data.post.id}?page=${page}`,
-            request: event
-          });
-          data.post.commentData = { ...res, page };
+          const [commentsRes, configRes] = await Promise.all([
+            ApiUtil.get({
+              path: `/api/comments/${data.post.id}?page=${page}`,
+              request: event
+            }),
+            ApiUtil.get({
+              path: `/api/comment/config`,
+              request: event
+            })
+          ]);
+          data.post.commentData = {...commentsRes, page, config: configRes};
         } catch (e) {
-          console.error("Failed to load comments", e);
+          console.error("Failed to load comments or config", e);
           data.post.commentData = {};
         }
       });

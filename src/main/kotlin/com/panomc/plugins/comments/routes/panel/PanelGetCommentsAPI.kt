@@ -7,6 +7,7 @@ import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.model.*
 import com.panomc.plugins.comments.CommentsPlugin
 import com.panomc.plugins.comments.db.dao.CommentDao
+import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import com.panomc.plugins.comments.permission.ManageCommentsPermission
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
@@ -20,7 +21,8 @@ import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 @Endpoint
 class PanelGetCommentsAPI(
     private val plugin: CommentsPlugin,
-    private val commentDao: CommentDao
+    private val commentDao: CommentDao,
+    private val postCommentSettingsDao: PostCommentSettingsDao
 ) : PanelApi() {
     override val paths = listOf(Path("/api/panel/comments/:postId", RouteType.GET))
 
@@ -76,7 +78,8 @@ class PanelGetCommentsAPI(
             mapOf(
                 "comments" to resultComments,
                 "totalPage" to totalPages,
-                "totalComments" to totalComments
+                "totalComments" to totalComments,
+                "commentsEnabled" to (postCommentSettingsDao.get(postId, sqlClient)?.enabled ?: true)
             )
         )
     }

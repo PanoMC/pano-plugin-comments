@@ -245,6 +245,13 @@ class CommentDaoImpl : CommentDao() {
         return rows.toList()[0].getLong(0)
     }
 
+    override suspend fun getLastCommentByUserId(userId: Long, sqlClient: SqlClient): Comment? {
+        val query =
+            "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `userId` = ? ORDER BY `createdAt` DESC LIMIT 1"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+        return rows.toEntities().getOrNull(0)
+    }
+
     override suspend fun uninstall(sqlClient: SqlClient) {
         sqlClient.query("DROP TABLE IF EXISTS `${getTablePrefix() + tableName}`").execute().coAwait()
     }

@@ -31,4 +31,5 @@ abstract class CommentDao : Dao<Comment>(Comment::class.java) {
     ): List<Comment>
 
     abstract suspend fun countParticipatedRootByUserId(userId: Long, sqlClient: SqlClient): Long
+    abstract suspend fun getLastCommentByUserId(userId: Long, sqlClient: SqlClient): Comment?
 }

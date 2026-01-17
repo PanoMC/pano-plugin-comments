@@ -8,6 +8,7 @@ import com.panomc.platform.model.*
 import com.panomc.plugins.comments.CommentsPlugin
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.CommentLikeDao
+import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
 import io.vertx.ext.web.validation.builder.Parameters.optionalParam
@@ -20,7 +21,8 @@ import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 class GetCommentsAPI(
     private val plugin: CommentsPlugin,
     private val commentDao: CommentDao,
-    private val commentLikeDao: CommentLikeDao
+    private val commentLikeDao: CommentLikeDao,
+    private val postCommentSettingsDao: PostCommentSettingsDao
 ) : Api() {
     override val paths = listOf(Path("/api/comments/:postId", RouteType.GET))
 
@@ -113,11 +115,14 @@ class GetCommentsAPI(
             }
         }
 
+        val settings = postCommentSettingsDao.get(postId, sqlClient)
+
         return Successful(
             mapOf(
                 "comments" to resultComments,
                 "totalPage" to totalPage,
-                "totalComments" to totalComments
+                "totalComments" to totalComments,
+                "commentsEnabled" to (settings?.enabled ?: true)
             )
         )
     }

@@ -34,7 +34,10 @@
       "like": "Like",
       "reply-placeholder": "Write your reply...",
       "login-required": "You must log in to comment.",
+      "no-permission": "You do not have permission to comment.",
+      "closed": "Comments are turned off for this post.",
       "load-more-replies": "Load More Replies ({count})",
+      "load-more": "Load More",
       "no-comments": "No comments yet. Be the first to comment!",
       "modals": {
         "delete": {
@@ -48,13 +51,37 @@
   },
   "toasts": {
     "add-success": "Comment added successfully.",
+    "add-error": "Failed to add comment.",
     "delete-success": "Comment deleted successfully.",
-    "copy-success": "Link copied successfully!"
+    "copy-success": "Link copied successfully!",
+    "rate-limited": "Please wait before commenting again."
   },
   "permissions": {
     "MANAGE_COMMENTS": {
       "title": "Manage Comments",
       "description": "Can view and delete comments."
     }
+  },
+  "settings": {
+    "title": "Comment Settings",
+    "replies-enabled": "Enable Replies",
+    "replies-enabled-desc": "Allow users to reply to comments",
+    "likes-enabled": "Enable Likes",
+    "likes-enabled-desc": "Allow users to like comments",
+    "pagination-type": "Pagination Type",
+    "pagination-classic": "Classic Pagination",
+    "pagination-load-more": "Load More",
+    "comment-permission": "Comment Permission",
+    "comment-permission-desc": "Leave empty to allow everyone to comment",
+    "reply-permission": "Reply Permission",
+    "reply-permission-desc": "Leave empty to allow everyone to reply",
+    "cooldown": "Cooldown (Seconds)",
+    "cooldown-desc": "Minimum time (in seconds) between comments",
+    "input-style": "Input Style",
+    "input-style-modal": "Modal",
+    "input-style-inline": "Inline Input",
+    "comments-enabled": "Enable Comments",
+    "comments-enabled-success": "Comments enabled successfully.",
+    "comments-disabled-success": "Comments disabled successfully."
   }
 }

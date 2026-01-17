@@ -1,6 +1,6 @@
 <script>
-  import { _ } from "../../../main.js";
-  import { Date } from "@panomc/sdk/components";
+  import {_} from "../../../main.js";
+  import {Date} from "@panomc/sdk/components";
 
   export let comment;
   export let isReply = false;
@@ -11,6 +11,9 @@
   export let toggleLike;
   export let addComment;
   export let fetchReplies;
+  export let likesEnabled = true;
+  export let repliesEnabled = true;
+  export let canReply = true;
 
   // We use <svelte:self> for recursion
 </script>
@@ -70,7 +73,7 @@
         </p>
 
         <div class="d-flex gap-3 align-items-center my-2">
-          {#if !isReply && session?.user}
+          {#if !isReply && session?.user && repliesEnabled && canReply}
             <button
               title={$_("components.comments.reply")}
               aria-label={$_("components.comments.reply")}
@@ -81,16 +84,18 @@
               <i class="fas fa-reply"></i>
             </button>
           {/if}
-          <button
-            class="btn btn-link text-decoration-none"
-            class:link-danger={comment.isLiked}
-            type="button"
-            on:click={() => toggleLike(comment)}
-            disabled={!session?.user}
-          >
-            <i class="{comment.isLiked ? 'fas' : 'far'} fa-heart me-1"></i>
-            {comment.likes > 0 ? comment.likes : ""}
-          </button>
+          {#if likesEnabled}
+            <button
+                    class="btn btn-link text-decoration-none"
+                    class:link-danger={comment.isLiked}
+                    type="button"
+                    on:click={() => toggleLike(comment)}
+                    disabled={!session?.user}
+            >
+              <i class="{comment.isLiked ? 'fas' : 'far'} fa-heart me-1"></i>
+              {comment.likes > 0 ? comment.likes : ""}
+            </button>
+          {/if}
         </div>
 
         {#if comment.showReplyBox}
@@ -133,6 +138,9 @@
           {toggleLike}
           {addComment}
           {fetchReplies}
+          {likesEnabled}
+          {repliesEnabled}
+          {canReply}
         />
       {/each}
     {/if}
