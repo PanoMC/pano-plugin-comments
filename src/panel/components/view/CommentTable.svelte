@@ -12,15 +12,13 @@
 </script>
 
 <div class="card">
-    <CardHeader>
-        <div slot="left">
-            {$_("pages.comments.table-title", {
-                values: {
-                    commentCount: commentCount || 0,
-                },
-            })}
-        </div>
-    </CardHeader>
+    <div class="card-header">
+        {$_("pages.comments.table-title", {
+            values: {
+                commentCount: commentCount || 0,
+            },
+        })}
+    </div>
 
     {#if commentCount === 0}
         <NoContent/>
