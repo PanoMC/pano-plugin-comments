@@ -61,33 +61,50 @@
 
     $: username = $page.params.username;
 
-    $: comments = data?.comments ?? [];
-    $: totalPage = data?.totalPage ?? 1;
-    $: totalComments = data?.totalComments ?? 0;
-    $: currentPage = data?.currentPage ?? 1;
-
-    let refreshKey = 0;
+    let comments = [];
+    let totalPage = 1;
+    let totalComments = 0;
+    let currentPage = 1;
 
     let lastUsername;
     $: if (username !== lastUsername) {
         lastUsername = username;
+        comments = data?.comments ?? [];
+        totalPage = data?.totalPage ?? 1;
+        totalComments = data?.totalComments ?? 0;
+        currentPage = data?.currentPage ?? 1;
         refreshKey++;
     }
+
+    let refreshKey = 0;
 
     const deleteComment = (id) => {
         showDeleteCommentModal(id);
     };
 
     setDeleteCommentModalCallback((id) => {
-        const oldCount = comments.length;
-        const updated = comments.filter((c) => c.id != id);
+        let deletedFromReplies = false;
+        const newComments = comments.map((c) => {
+            if (c.replies?.some((r) => r.id == id)) {
+                deletedFromReplies = true;
+                return {
+                    ...c,
+                    replies: c.replies.filter((r) => r.id != id),
+                    replyCount: Math.max(0, (c.replyCount || 1) - 1),
+                };
+            }
+            return c;
+        });
 
-        if (updated.length < oldCount) {
-            data = {
-                ...data,
-                comments: updated,
-                totalComments: (data.totalComments || 1) - 1,
-            };
+        if (deletedFromReplies) {
+            comments = newComments;
+        } else {
+            const oldCount = comments.length;
+            const filtered = comments.filter((c) => c.id != id);
+            if (filtered.length < oldCount) {
+                comments = filtered;
+                totalComments = Math.max(0, totalComments - 1);
+            }
         }
     });
 
@@ -103,13 +120,10 @@
                 path: `/api/panel/comments/player/${username}${queryParams}`,
             });
 
-            data = {
-                ...data,
-                comments: res.comments || [],
-                totalPage: res.totalPage || 1,
-                totalComments: res.commentCount || 0,
-                currentPage: pageNum,
-            };
+            comments = res.comments || [];
+            totalPage = res.totalPage || 1;
+            totalComments = res.commentCount || 0;
+            currentPage = pageNum;
             refreshKey++;
 
             const url = new URL(window.location.href);
