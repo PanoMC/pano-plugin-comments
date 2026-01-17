@@ -21,4 +21,14 @@ abstract class CommentDao : Dao<Comment>(Comment::class.java) {
     abstract suspend fun updateLikes(id: Long, likes: Int, sqlClient: SqlClient)
     abstract suspend fun updateContent(id: Long, content: String, sqlClient: SqlClient)
     abstract suspend fun getCommentCounts(postIds: List<Long>, sqlClient: SqlClient): Map<Long, Int>
+    abstract suspend fun getByUserId(userId: Long, page: Long, limit: Long = 10, sqlClient: SqlClient): List<Comment>
+    abstract suspend fun countByUserId(userId: Long, sqlClient: SqlClient): Long
+    abstract suspend fun getParticipatedRootByUserId(
+        userId: Long,
+        page: Long,
+        limit: Long = 10,
+        sqlClient: SqlClient
+    ): List<Comment>
+
+    abstract suspend fun countParticipatedRootByUserId(userId: Long, sqlClient: SqlClient): Long
 }

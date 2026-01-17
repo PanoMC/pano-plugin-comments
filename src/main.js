@@ -1,6 +1,6 @@
-import { PanoPlugin, viewComponent } from "@panomc/sdk";
-import { derived } from "svelte/store";
-import { _ as i18n } from "@panomc/sdk/utils/language";
+import {PanoPlugin, viewComponent} from "@panomc/sdk";
+import {derived} from "svelte/store";
+import {_ as i18n} from "@panomc/sdk/utils/language";
 import ApiUtil from "@panomc/sdk/utils/api";
 
 const pluginId = "pano-plugin-comments"
@@ -65,6 +65,12 @@ export default class PanoPluginComments extends PanoPlugin {
       pano.ui.hook.register({
         name: 'panel:posts:table:row:after-views',
         component: viewComponent(() => import('./panel/components/view/PostTableRowCommentCount.svelte')),
+        permission: `pano.plugin.${pluginId}.manage.comments`,
+      });
+
+      pano.ui.hook.register({
+        name: 'panel:player-detail:bottom',
+        component: viewComponent(() => import('./panel/components/view/PlayerComments.svelte')),
         permission: `pano.plugin.${pluginId}.manage.comments`,
       });
     } else {

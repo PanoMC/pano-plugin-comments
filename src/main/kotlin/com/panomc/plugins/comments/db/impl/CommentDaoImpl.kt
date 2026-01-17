@@ -201,6 +201,50 @@ class CommentDaoImpl : CommentDao() {
         return counts
     }
 
+    override suspend fun getByUserId(userId: Long, page: Long, limit: Long, sqlClient: SqlClient): List<Comment> {
+        val offset = (page - 1) * limit
+        val query =
+            "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `userId` = ? ORDER BY `createdAt` DESC LIMIT ? OFFSET ?"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId, limit, offset)).coAwait()
+        return rows.toEntities()
+    }
+
+    override suspend fun countByUserId(userId: Long, sqlClient: SqlClient): Long {
+        val query = "SELECT COUNT(`id`) FROM `${getTablePrefix() + tableName}` WHERE `userId` = ?"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+        if (rows.size() == 0) return 0L
+        return rows.toList()[0].getLong(0)
+    }
+
+    override suspend fun getParticipatedRootByUserId(
+        userId: Long,
+        page: Long,
+        limit: Long,
+        sqlClient: SqlClient
+    ): List<Comment> {
+        val offset = (page - 1) * limit
+        val query = """
+            SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` 
+            WHERE `id` IN (
+                SELECT DISTINCT IFNULL(parentId, id) 
+                FROM `${getTablePrefix() + tableName}` 
+                WHERE `userId` = ?
+            )
+            ORDER BY `createdAt` DESC 
+            LIMIT ? OFFSET ?
+        """.trimIndent()
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId, limit, offset)).coAwait()
+        return rows.toEntities()
+    }
+
+    override suspend fun countParticipatedRootByUserId(userId: Long, sqlClient: SqlClient): Long {
+        val query =
+            "SELECT COUNT(DISTINCT IFNULL(parentId, id)) FROM `${getTablePrefix() + tableName}` WHERE `userId` = ?"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+        if (rows.size() == 0) return 0L
+        return rows.toList()[0].getLong(0)
+    }
+
     override suspend fun uninstall(sqlClient: SqlClient) {
         sqlClient.query("DROP TABLE IF EXISTS `${getTablePrefix() + tableName}`").execute().coAwait()
     }
