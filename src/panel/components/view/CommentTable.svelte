@@ -1,6 +1,6 @@
 <script>
     import {_} from "../../../main.js";
-    import {CardHeader, NoContent, Pagination} from "@panomc/sdk/components";
+    import {NoContent, Pagination} from "@panomc/sdk/components";
     import CommentRow from "../rows/CommentRow.svelte";
 
     export let comments = [];
@@ -9,6 +9,7 @@
     export let totalPage = 1;
     export let onDelete;
     export let onPageClick;
+    export let highlightedComment = null;
 </script>
 
 <div class="card">
@@ -62,6 +63,29 @@
                 </tr>
                 </thead>
                 <tbody>
+                {#if highlightedComment}
+                    <tr>
+                        <td
+                                colspan="6"
+                                class="bg-info bg-opacity-10 text-info small fw-medium py-2"
+                        >
+                            <i class="fas fa-star me-2"></i>
+                            {$_("pages.comments.table.highlighted-comment")}
+                        </td>
+                    </tr>
+                    <CommentRow
+                            comment={highlightedComment}
+                            {onDelete}
+                            isHighlightedBlock={true}
+                    />
+                    <tr>
+                        <td
+                                colspan="6"
+                                class="p-0"
+                                style="height: 10px; background: rgba(0,0,0,0.05)"
+                        ></td>
+                    </tr>
+                {/if}
                     {#each comments as comment (comment.id)}
                         <CommentRow {comment} {onDelete} />
                     {/each}

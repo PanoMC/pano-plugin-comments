@@ -14,7 +14,11 @@
         "post-id": "Post: #{postId}",
         "delete": "Delete",
         "no-comments": "No comments yet.",
-        "load-more-replies": "Load more replies ({count})"
+        "load-more-replies": "Load more replies ({count})",
+        "copy-link": "Copy Link",
+        "highlighted-comment": "Highlighted Comment",
+        "hidden-replies-above": "{count} replies hidden above",
+        "hidden-replies-below": "{count} replies hidden below"
       }
     }
   },
@@ -43,7 +47,8 @@
   },
   "toasts": {
     "add-success": "Comment added successfully.",
-    "delete-success": "Comment deleted successfully."
+    "delete-success": "Comment deleted successfully.",
+    "copy-success": "Link copied successfully!"
   },
   "permissions": {
     "MANAGE_COMMENTS": {

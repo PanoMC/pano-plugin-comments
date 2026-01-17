@@ -47,6 +47,7 @@
     let comments = [];
 
     $: comments = data.comments || [];
+    $: highlightedComment = data.highlightedComment;
 
     const deleteComment = (id) => {
         showDeleteCommentModal(id);
@@ -102,6 +103,7 @@
     totalPage={data.totalPage}
     onDelete={deleteComment}
     {onPageClick}
+    {highlightedComment}
 />
 
 <ConfirmDeleteCommentModal />

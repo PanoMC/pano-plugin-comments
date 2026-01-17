@@ -1,18 +1,38 @@
 <script>
   import {_} from "../../../main.js";
   import {Date} from "@panomc/sdk/components";
-  import {base} from "@panomc/sdk/svelte";
+  import {base, page} from "@panomc/sdk/svelte";
   import ApiUtil, {buildQueryParams} from "@panomc/sdk/utils/api";
+  import {get} from "svelte/store";
+  import {showToast} from "@panomc/sdk/toasts";
 
   export let comment;
   export let onDelete;
   export let isReply = false;
+  export let isHighlightedBlock = false;
 
-  // Use comment.replies if it exists, otherwise empty (for panel where we fetch on demand)
-  $: replies = comment.replies || [];
   let showReplies = false;
   let loadingReplies = false;
-  let repliesHasMore = false;
+  $: replies = comment?.replies || [];
+  $: repliesHasMore =
+          (comment?.replyCount || 0) > replies.length && !(comment?.hiddenBelow > 0);
+
+  $: activeId = $page.url.searchParams.get("commentId");
+  $: isAnyReplyActive = replies.some((r) => String(r.id) === activeId);
+  $: isCommentActive = String(comment?.id) === activeId;
+  $: highlighted = isCommentActive || isHighlightedBlock || isAnyReplyActive;
+
+  // Auto expand if any reply is active or if we have pre-loaded replies
+  $: if ((comment.replies && comment.replies.length > 0) || isAnyReplyActive) {
+    if (!isReply) showReplies = true;
+  }
+
+  function copyLink(id) {
+    const url = new URL(get(page).url);
+    url.searchParams.set("commentId", id.toString());
+    navigator.clipboard.writeText(url.toString());
+    showToast($_("toasts.copy-success"));
+  }
 
   async function fetchReplies() {
     if (loadingReplies) return;
@@ -46,7 +66,11 @@
   }
 </script>
 
-<tr class:root-with-replies={showReplies && replies.length > 0}>
+<tr
+        class:active-highlight={isCommentActive}
+        class:highlighted-block={highlighted}
+        class:root-with-replies={showReplies && replies.length > 0}
+>
   <td class="align-middle">
     <div class="dropdown position-static">
       <button
@@ -60,6 +84,14 @@
       <div
         class="dropdown-menu dropdown-menu-start animate__animated animate__fadeIn"
       >
+        <button
+                class="dropdown-item"
+                on:click={() => copyLink(comment.id)}
+                type="button"
+        >
+          <i class="fas fa-link me-2"></i>
+          {$_("pages.comments.table.copy-link")}
+        </button>
         <button
           type="button"
           class="dropdown-item"
@@ -118,7 +150,7 @@
                     class:open={showReplies}
             ></i>
             {comment.replyCount}
-            {$_("pages.comments.table.replies") || "Yanıt"}
+            {$_("pages.comments.table.replies")}
           </button>
         {/if}
       </div>
@@ -133,10 +165,27 @@
 </tr>
 
 {#if showReplies}
+  {#if comment.hiddenAbove > 0}
+    <tr class="reply-row" class:highlighted-block={highlighted}>
+      <td colspan="2"></td>
+      <td colspan="4" class="py-1">
+        <span class="small text-muted ps-2">
+          <i class="fas fa-ellipsis-h me-2"></i>
+          {$_("pages.comments.table.hidden-replies-above", {
+            values: {count: comment.hiddenAbove},
+          })}
+        </span>
+      </td>
+    </tr>
+  {/if}
   {#each replies as reply, i (reply.id)}
     <tr
             class="reply-row"
-            class:last-reply={i === replies.length - 1 && !repliesHasMore}
+            class:last-reply={i === replies.length - 1 &&
+        !repliesHasMore &&
+        !(comment.hiddenBelow > 0)}
+            class:highlighted-block={highlighted}
+            class:active-highlight={String(reply.id) === activeId}
     >
       <td class="align-middle">
         <div class="dropdown position-static">
@@ -154,6 +203,14 @@
             <button
               type="button"
               class="dropdown-item"
+              on:click={() => copyLink(reply.id)}
+            >
+              <i class="fas fa-link me-2"></i>
+              {$_("pages.comments.table.copy-link")}
+            </button>
+            <button
+                    type="button"
+                    class="dropdown-item text-danger"
               on:click={() => onDelete(reply.id)}
             >
               <i class="fas fa-trash me-2"></i>
@@ -203,8 +260,25 @@
       </td>
     </tr>
   {/each}
+  {#if comment.hiddenBelow > 0}
+    <tr
+            class="reply-row"
+            class:last-reply={!repliesHasMore}
+            class:highlighted-block={highlighted}
+    >
+      <td colspan="2"></td>
+      <td colspan="4" class="py-1">
+        <span class="small text-muted ps-2">
+          <i class="fas fa-ellipsis-h me-2"></i>
+          {$_("pages.comments.table.hidden-replies-below", {
+            values: {count: comment.hiddenBelow},
+          })}
+        </span>
+      </td>
+    </tr>
+  {/if}
   {#if repliesHasMore}
-    <tr class="reply-row last-reply">
+    <tr class="reply-row last-reply" class:highlighted-block={highlighted}>
       <td colspan="2"></td>
       <td colspan="4">
         <button
@@ -236,6 +310,64 @@
     border-bottom: none !important;
   }
 
+  /* Consolidated highlighted block and active highlight styles */
+  tr.active-highlight {
+    background-color: rgba(var(--bs-info-rgb), 0.25) !important;
+  }
+
+  /* Thick borders ONLY for highlighted replies to distinguish within thread */
+  tr.active-highlight.reply-row td {
+    box-shadow: inset 0 2px 0 var(--bs-info),
+    inset 0 -2px 0 var(--bs-info) !important;
+  }
+
+  tr.active-highlight.reply-row td:first-child {
+    border-left: 3px solid var(--bs-info) !important;
+    box-shadow: inset 0 2px 0 var(--bs-info),
+    inset 0 -2px 0 var(--bs-info) !important;
+  }
+
+  tr.active-highlight.reply-row td:last-child {
+    border-right: 3px solid var(--bs-info) !important;
+    box-shadow: inset 0 2px 0 var(--bs-info),
+    inset 0 -2px 0 var(--bs-info) !important;
+  }
+
+  tr.active-highlight:hover {
+    background-color: rgba(var(--bs-info-rgb), 0.3) !important;
+  }
+
+  /* Block outline using subtle borders instead of shadows */
+  tr.highlighted-block td {
+    border-top: 1px solid rgba(var(--bs-info-rgb), 0.3) !important;
+    border-bottom: 1px solid rgba(var(--bs-info-rgb), 0.3) !important;
+  }
+
+  /* Root with replies shouldn't have bottom border to merge with thread */
+  tr.highlighted-block.root-with-replies td {
+    border-bottom: none !important;
+  }
+
+  /* Replies merge with parent by having no top border */
+  tr.highlighted-block.reply-row td {
+    border-top: none !important;
+  }
+
+  /* Only the very last row in the block gets the bottom border */
+  tr.highlighted-block.reply-row:not(.last-reply) td {
+    border-bottom: none !important;
+  }
+
+  tr.highlighted-block td:first-child {
+    border-left: 1px solid rgba(var(--bs-info-rgb), 0.3) !important;
+  }
+
+  tr.highlighted-block td:last-child {
+    border-right: 1px solid rgba(var(--bs-info-rgb), 0.3) !important;
+  }
+
+  /* Removed unused selector */
+
   .reply-row {
     transition: background-color 0.2s;
   }
@@ -255,6 +387,11 @@
 
   .reply-row:hover {
     background-color: rgba(0, 0, 0, 0.02) !important;
+  }
+
+  .reply-row.highlighted-block .reply-line {
+    border-left-color: var(--bs-info);
+    border-bottom-color: var(--bs-info);
   }
 
   .reply-line {
