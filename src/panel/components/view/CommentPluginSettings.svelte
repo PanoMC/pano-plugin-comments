@@ -55,7 +55,7 @@
                         default: "Enable Replies",
                     })}
                 </label>
-                <div class="small text-muted">
+                <div class="small">
                     {$_("settings.replies-enabled-desc", {
                         default: "Allow users to reply to comments",
                     })}
@@ -81,7 +81,7 @@
                         default: "Enable Likes",
                     })}
                 </label>
-                <div class="small text-muted">
+                <div class="small">
                     {$_("settings.likes-enabled-desc", {
                         default: "Allow users to like comments",
                     })}

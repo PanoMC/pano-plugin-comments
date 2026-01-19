@@ -128,7 +128,7 @@
   </td>
   <td class="align-middle">
     <div class="d-flex flex-column gap-2">
-      <div class="text-wrap" style="max-width: 500px;">
+      <div class="text-truncate" style="max-width: 400px;" title={comment.content}>
         {comment.content}
       </div>
       <div class="d-flex align-items-center gap-2">
@@ -171,7 +171,7 @@
     <tr class="reply-row" class:highlighted-block={highlighted}>
       <td colspan="2"></td>
       <td colspan="4" class="py-1">
-        <span class="small text-muted ps-2">
+        <span class="small ps-2">
           <i class="fas fa-ellipsis-h me-2"></i>
           {$_("pages.comments.table.hidden-replies-above", {
             values: { count: comment.hiddenAbove },
@@ -248,7 +248,7 @@
         </a>
       </td>
       <td>
-        <div class="text-wrap small ps-2" style="max-width: 500px;">
+        <div class="text-truncate small ps-2" style="max-width: 400px;" title={reply.content}>
           {reply.content}
         </div>
       </td>
@@ -272,7 +272,7 @@
     >
       <td colspan="2"></td>
       <td colspan="4" class="py-1">
-        <span class="small text-muted ps-2">
+        <span class="small ps-2">
           <i class="fas fa-ellipsis-h me-2"></i>
           {$_("pages.comments.table.hidden-replies-below", {
             values: { count: comment.hiddenBelow },
