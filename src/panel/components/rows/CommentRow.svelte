@@ -107,7 +107,7 @@
     #{comment.id}
   </td>
   <td>
-    <a
+    <a title="{$_('buttons.view')}" aria-label="{$_('buttons.view')}"
       href="{base}/players/detail/{comment.username}"
       class="d-flex align-items-center gap-2"
     >
@@ -116,7 +116,7 @@
         class="rounded-circle"
         width="32"
         height="32"
-        alt=""
+        alt="{comment.username}"
       />
       {comment.username}
       {#if comment.userGroup && comment.userGroup.name !== "default"}
@@ -132,7 +132,7 @@
         {comment.content}
       </div>
       <div class="d-flex align-items-center gap-2">
-        <a href="{base}/posts/detail/{comment.postId}">
+        <a title="{$_('buttons.edit')}" aria-label="{$_('buttons.edit')}" href="{base}/posts/detail/{comment.postId}">
           {$_("pages.comments.table.post-id", {
             values: { postId: comment.postId },
           })}
@@ -140,6 +140,8 @@
 
         {#if !isReply && comment.replyCount > 0}
           <button
+            title="{$_('buttons.view')}"
+            aria-label="{$_('buttons.view')}"
             type="button"
             class="btn btn-link btn-sm btn-sm"
             on:click={toggleReplies}
@@ -225,6 +227,8 @@
       <td class="position-relative">
         <div class="reply-line ps-2"></div>
         <a
+          title="{$_('buttons.view')}"
+          aria-label="{$_('buttons.view')}"
           href="{base}/players/detail/{reply.username}"
           class="d-flex align-items-center gap-2 text-decoration-none text-reset ms-3"
         >

@@ -42,7 +42,7 @@
           <div>
             <a href="/player/{comment.username}">{comment.username}</a>
             {#if comment.userGroup && comment.userGroup.name !== "default"}
-              <span class="badge text-bg-primary ms-1">
+              <span class="badge ms-1">
                 {comment.userGroup.displayName}
               </span>
             {/if}
@@ -58,17 +58,17 @@
             </div>
             {#if session?.user?.username === comment.username}
               <button
-                class="btn btn-link btn-sm ms-2"
+                class="btn btn-link ms-2"
                 type="button"
                 on:click={() => deleteComment(comment.id)}
                 title={$_("pages.comments.table.delete")}
               >
-                <i class="fas fa-trash-alt small"></i>
+                <i class="fas fa-trash-alt"></i>
               </button>
             {/if}
           </div>
         </div>
-        <p>
+        <p class="mb-0">
           {comment.content}
         </p>
 
@@ -148,7 +148,7 @@
     {#if !isReply && (comment.repliesHasMore !== undefined ? comment.repliesHasMore : comment.replyCount > (comment.replies?.length || 0))}
       <div class="ms-5 ps-3 mt-2">
         <button
-          class="btn btn-primary btn-sm"
+          class="btn btn-secondary btn-sm"
           on:click={() => fetchReplies(comment)}
           disabled={comment.repliesLoading}
         >

@@ -142,7 +142,7 @@
     }
 </script>
 
-<div class="mt-3" id="pano-player-comments-section">
+<div id="pano-player-comments-section">
     {#key refreshKey}
         <CommentTable
                 {comments}

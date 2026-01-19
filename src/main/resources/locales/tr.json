@@ -1,4 +1,8 @@
 {
+  "buttons": {
+    "edit": "Düzenle",
+    "view": "Görüntüle"
+  },
   "pages": {
     "comments": {
       "title": "Yorumlar",
@@ -10,7 +14,7 @@
         "likes": "Beğeni",
         "replies": "Yanıt",
         "date": "Tarih",
-        "actions": "Eylemler",
+        "actions": "İşlemler",
         "post-id": "Yazı: #{postId}",
         "delete": "Sil",
         "no-comments": "Henüz yorum yapılmamış.",

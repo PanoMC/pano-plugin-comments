@@ -1,4 +1,8 @@
 {
+  "buttons": {
+    "edit": "Edit",
+    "view": "View"
+  },
   "pages": {
     "comments": {
       "title": "Comments",
