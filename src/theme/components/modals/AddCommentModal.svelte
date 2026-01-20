@@ -1,13 +1,54 @@
-<script context="module">
-  import { writable, get } from "svelte/store";
+<div aria-hidden="true" class="modal fade" bind:this={$modalElement} role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{$_('pages.comments.title')}</h5>
+        <button type="button" class="btn-close" on:click={hide} aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex gap-2">
+          <div class="flex-shrink-0 d-none d-sm-block">
+            <img
+              src="https://minotar.net/avatar/{session?.user?.username || 'char'}"
+              class="rounded-circle"
+              width="40"
+              height="40"
+              alt="avatar" />
+          </div>
+          <div class="flex-grow-1">
+            <textarea
+              class="form-control"
+              rows="4"
+              placeholder={$_('components.comments.placeholder')}
+              style="resize: none;"
+              bind:value={content}
+              disabled={loading}></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-secondary w-100"
+          type="button"
+          disabled={!content.trim() || loading}
+          on:click={onSendClick}>
+          {$_('components.comments.send')}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  const modalElement = writable();
+<script context="module">
+    import {get, writable} from 'svelte/store';
+
+    const modalElement = writable();
   let callback = (content) => {};
   let modal;
 
   export function show() {
     modal = new window.bootstrap.Modal(get(modalElement), {
-      backdrop: "static",
+      backdrop: 'static',
       keyboard: false,
     });
     modal.show();
@@ -23,11 +64,11 @@
 </script>
 
 <script>
-  import { _ } from "../../../main.js";
-  import { page } from "@panomc/sdk/svelte";
+  import { _ } from '../../../main.js';
+  import { page } from '@panomc/sdk/svelte';
 
   $: session = $page.data.session;
-  let content = "";
+  let content = '';
   let loading = false;
 
   async function onSendClick() {
@@ -36,68 +77,12 @@
     loading = true;
     try {
       await callback(content);
-      content = "";
+      content = '';
       hide();
     } catch (e) {
-      console.error("Failed to add comment via modal", e);
+      console.error('Failed to add comment via modal', e);
     } finally {
       loading = false;
     }
   }
 </script>
-
-<div
-  aria-hidden="true"
-  class="modal fade"
-  bind:this={$modalElement}
-  role="dialog"
-  tabindex="-1"
->
-  <div class="modal-dialog modal-dialog-centered" role="dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{$_("pages.comments.title")}</h5>
-        <button
-          type="button"
-          class="btn-close"
-          on:click={hide}
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="d-flex gap-2">
-          <div class="flex-shrink-0 d-none d-sm-block">
-            <img
-              src="https://minotar.net/avatar/{session?.user?.username ||
-                'char'}"
-              class="rounded-circle"
-              width="40"
-              height="40"
-              alt="avatar"
-            />
-          </div>
-          <div class="flex-grow-1">
-            <textarea
-              class="form-control"
-              rows="4"
-              placeholder={$_("components.comments.placeholder")}
-              style="resize: none;"
-              bind:value={content}
-              disabled={loading}
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          class="btn btn-secondary w-100"
-          type="button"
-          disabled={!content.trim() || loading}
-          on:click={onSendClick}
-        >
-          {$_("components.comments.send")}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
