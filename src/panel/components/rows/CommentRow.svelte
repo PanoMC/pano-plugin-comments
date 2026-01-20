@@ -107,7 +107,9 @@
     #{comment.id}
   </td>
   <td>
-    <a title="{$_('buttons.view')}" aria-label="{$_('buttons.view')}"
+    <a
+      title={$_("buttons.view")}
+      aria-label={$_("buttons.view")}
       href="{base}/players/detail/{comment.username}"
       class="d-flex align-items-center gap-2"
     >
@@ -116,7 +118,7 @@
         class="rounded-circle"
         width="32"
         height="32"
-        alt="{comment.username}"
+        alt={comment.username}
       />
       {comment.username}
       {#if comment.userGroup && comment.userGroup.name !== "default"}
@@ -128,11 +130,19 @@
   </td>
   <td class="align-middle">
     <div class="d-flex flex-column gap-2">
-      <div class="text-truncate" style="max-width: 400px;" title={comment.content}>
+      <div
+        class="text-truncate"
+        style="max-width: 400px;"
+        title={comment.content}
+      >
         {comment.content}
       </div>
       <div class="d-flex align-items-center gap-2">
-        <a title="{$_('buttons.edit')}" aria-label="{$_('buttons.edit')}" href="{base}/posts/detail/{comment.postId}">
+        <a
+          title={$_("buttons.edit")}
+          aria-label={$_("buttons.edit")}
+          href="{base}/posts/detail/{comment.postId}"
+        >
           {$_("pages.comments.table.post-id", {
             values: { postId: comment.postId },
           })}
@@ -140,8 +150,8 @@
 
         {#if !isReply && comment.replyCount > 0}
           <button
-            title="{$_('buttons.view')}"
-            aria-label="{$_('buttons.view')}"
+            title={$_("buttons.view")}
+            aria-label={$_("buttons.view")}
             type="button"
             class="btn btn-link btn-sm btn-sm"
             on:click={toggleReplies}
@@ -227,8 +237,8 @@
       <td class="position-relative">
         <div class="reply-line ps-2"></div>
         <a
-          title="{$_('buttons.view')}"
-          aria-label="{$_('buttons.view')}"
+          title={$_("buttons.view")}
+          aria-label={$_("buttons.view")}
           href="{base}/players/detail/{reply.username}"
           class="d-flex align-items-center gap-2 text-decoration-none text-reset ms-3"
         >
@@ -248,7 +258,11 @@
         </a>
       </td>
       <td>
-        <div class="text-truncate small ps-2" style="max-width: 400px;" title={reply.content}>
+        <div
+          class="text-truncate small ps-2"
+          style="max-width: 400px;"
+          title={reply.content}
+        >
           {reply.content}
         </div>
       </td>
@@ -307,7 +321,7 @@
   }
 
   .reply-row.last-reply td {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
   }
 
   tr.root-with-replies td {
@@ -393,7 +407,7 @@
   }
 
   .reply-row:hover {
-    background-color: rgba(0, 0, 0, 0.02) !important;
+    background-color: rgba(var(--bs-body-color-rgb), 0.03) !important;
   }
 
   .reply-row.highlighted-block .reply-line {
@@ -407,8 +421,8 @@
     top: -10px;
     bottom: 50%;
     width: 15px;
-    border-left: 2px solid #dee2e6;
-    border-bottom: 2px solid #dee2e6;
+    border-left: 2px solid var(--bs-border-color);
+    border-bottom: 2px solid var(--bs-border-color);
     border-bottom-left-radius: 8px;
   }
 
