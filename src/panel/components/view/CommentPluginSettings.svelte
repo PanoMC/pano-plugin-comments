@@ -1,7 +1,7 @@
 {#if addon?.id === 'pano-plugin-comments'}
   <div class="card">
     <div class="card-header">
-      {$_('settings.title', { default: 'Comment Settings' })}
+      {$_('settings.title', { default: 'Preferences' })}
     </div>
     <div class="card-body animate__animated animate__fadeIn">
       <!-- Replies -->
@@ -12,7 +12,7 @@
               default: 'Enable Replies',
             })}
           </span>
-          <small class="text-secondary fw-normal">
+          <small>
             {$_('settings.replies-enabled-desc', {
               default: 'Allow users to reply to comments',
             })}
@@ -37,7 +37,7 @@
               default: 'Enable Likes',
             })}
           </span>
-          <small class="text-secondary fw-normal">
+          <small>
             {$_('settings.likes-enabled-desc', {
               default: 'Allow users to like comments',
             })}
@@ -53,8 +53,6 @@
           </div>
         </div>
       </div>
-
-      <hr class="my-3 opacity-10" />
 
       <!-- Comment Permission -->
       <div class="row mb-3">
@@ -100,8 +98,6 @@
         </div>
       </div>
 
-      <hr class="my-3 opacity-10" />
-
       <!-- Cooldown -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="cooldown">
@@ -124,8 +120,6 @@
         </div>
       </div>
 
-      <hr class="my-3 opacity-10" />
-
       <!-- Input Style -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="inputStyle1">
@@ -143,7 +137,6 @@
               value="MODAL"
               bind:group={config.inputStyle} />
             <label class="btn btn-outline-primary" for="inputStyle1">
-              <i class="fas fa-window-maximize me-2"></i>
               {$_('settings.input-style-modal', {
                 default: 'Modal',
               })}
@@ -157,7 +150,6 @@
               value="INLINE"
               bind:group={config.inputStyle} />
             <label class="btn btn-outline-primary" for="inputStyle2">
-              <i class="fas fa-pen me-2"></i>
               {$_('settings.input-style-inline', {
                 default: 'Inline Input',
               })}
@@ -183,7 +175,6 @@
               value="PAGINATION"
               bind:group={config.paginationType} />
             <label class="btn btn-outline-primary" for="paginationType1">
-              <i class="fas fa-list-ol me-2"></i>
               {$_('settings.pagination-classic', {
                 default: 'Classic Pagination',
               })}
@@ -197,7 +188,6 @@
               value="LOAD_MORE"
               bind:group={config.paginationType} />
             <label class="btn btn-outline-primary" for="paginationType2">
-              <i class="fas fa-arrow-down me-2"></i>
               {$_('settings.pagination-load-more', {
                 default: 'Load More',
               })}
@@ -211,9 +201,7 @@
           {#if saving}
             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
             ></span>
-          {:else}
-            <i class="fas fa-save me-2"></i>
-          {/if}
+          {:else}{/if}
           {$_('generic.save', { default: 'Save' })}
         </button>
       </div>
@@ -222,11 +210,11 @@
 {/if}
 
 <script>
-    import {_} from '../../../main.js';
-    import ApiUtil from '@panomc/sdk/utils/api';
-    import {showToast} from '@panomc/sdk/toasts';
+  import { _ } from '../../../main.js';
+  import ApiUtil from '@panomc/sdk/utils/api';
+  import { showToast } from '@panomc/sdk/toasts';
 
-    export let addon;
+  export let addon;
 
   let config = addon?.config || {
     repliesEnabled: true,

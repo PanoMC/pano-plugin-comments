@@ -67,7 +67,7 @@
     }
   },
   "settings": {
-    "title": "Comment Settings",
+    "title": "Preferences",
     "replies-enabled": "Enable Replies",
     "replies-enabled-desc": "Allow users to reply to comments",
     "likes-enabled": "Enable Likes",

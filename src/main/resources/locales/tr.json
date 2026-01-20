@@ -67,7 +67,7 @@
     }
   },
   "settings": {
-    "title": "Yorum Ayarları",
+    "title": "Tercihler",
     "replies-enabled": "Yanıtları Etkinleştir",
     "replies-enabled-desc": "Kullanıcıların yorumlara yanıt vermesine izin ver",
     "likes-enabled": "Beğenileri Etkinleştir",
