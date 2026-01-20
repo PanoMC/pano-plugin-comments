@@ -4,7 +4,7 @@
   import {base, page} from "@panomc/sdk/svelte";
   import ApiUtil, {buildQueryParams} from "@panomc/sdk/utils/api";
   import {showToast} from "@panomc/sdk/toasts";
-  import {copy} from "@panomc/sdk/utils/text"
+  import {copy} from "@panomc/sdk/utils/text";
 
   export let comment;
   export let onDelete;
@@ -30,7 +30,7 @@
   function copyLink(id) {
     const url = new URL(window.location.origin + base + "/posts/comments");
     url.searchParams.set("commentId", id.toString());
-    copy(url.toString())
+    copy(url.toString());
     showToast($_("toasts.copy-success"));
   }
 
@@ -410,7 +410,7 @@
     background-color: rgba(var(--bs-body-color-rgb), 0.03) !important;
   }
 
-  .reply-row.highlighted-block .reply-line {
+  .reply-row.active-highlight .reply-line {
     border-left-color: var(--bs-info);
     border-bottom-color: var(--bs-info);
   }
