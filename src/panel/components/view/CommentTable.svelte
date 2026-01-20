@@ -10,16 +10,19 @@
     export let onDelete;
     export let onPageClick;
     export let highlightedComment = null;
+    export let hideHeader = false;
 </script>
 
-<div class="card">
-    <div class="card-header">
-        {$_("pages.comments.table-title", {
-            values: {
-                commentCount: commentCount || 0,
-            },
-        })}
-    </div>
+<div class:card={!hideHeader}>
+    {#if !hideHeader}
+        <div class="card-header">
+            {$_("pages.comments.table-title", {
+                values: {
+                    commentCount: commentCount || 0,
+                },
+            })}
+        </div>
+    {/if}
 
     {#if commentCount === 0}
         <NoContent/>
@@ -93,7 +96,7 @@
             </table>
         </div>
 
-        <div class="card-footer">
+        <div class={hideHeader ? "px-3 py-2 border-top" : "card-footer"}>
             <Pagination
                 {page}
                 {totalPage}

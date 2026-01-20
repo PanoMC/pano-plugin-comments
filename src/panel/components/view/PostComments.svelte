@@ -174,9 +174,13 @@
         <div
                 class="card-header d-flex justify-content-between align-items-center"
         >
-            <h5 class="mb-0">
-                {$_("pages.comments.title", {default: "Comments"})}
-            </h5>
+            <div>
+                {$_("pages.comments.table-title", {
+                    values: {
+                        commentCount: totalComments || 0,
+                    },
+                })}
+            </div>
             <div class="form-check form-switch mb-0">
                 <input
                         checked={commentsEnabled}
@@ -201,6 +205,7 @@
                         {totalPage}
                         onDelete={deleteComment}
                         {onPageClick}
+                        hideHeader={true}
                 />
             {/key}
         </div>
