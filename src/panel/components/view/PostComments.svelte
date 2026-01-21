@@ -19,9 +19,9 @@
           on:change={toggleComments}
           type="checkbox" />
         <label class="form-check-label" for="commentsEnabledSwitch">
-          {$_('settings.comments-enabled', {
-            default: 'Enable Comments',
-          })}
+          {commentsEnabled
+            ? $_('settings.enabled')
+            : $_('settings.disabled')}
         </label>
       </div>
     </div>
@@ -43,10 +43,10 @@
 <ConfirmDeleteCommentModal />
 
 <script context="module">
-    import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
-    import {_} from '../../../main.js';
+  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+  import {_} from '../../../main.js';
 
-    export async function load(event) {
+  export async function load(event) {
     const {
       url: { searchParams },
       params,
@@ -61,6 +61,7 @@
           totalPage: 1,
           totalComments: 0,
           currentPage: 1,
+          commentsEnabled: true,
         },
       };
     }
@@ -76,7 +77,6 @@
           comments: res.comments || [],
           totalPage: res.totalPage || 1,
           totalComments: res.totalComments || 0,
-          totalComments: res.totalComments || 0,
           currentPage: parseInt(page),
           commentsEnabled: res.commentsEnabled !== false,
         },
@@ -89,6 +89,7 @@
           totalPage: 1,
           totalComments: 0,
           currentPage: 1,
+          commentsEnabled: true,
         },
       };
     }
@@ -108,7 +109,7 @@
   export let data;
 
   let comments = data.comments || [];
-  let commentsEnabled = data.commentsEnabled;
+  let commentsEnabled = data.commentsEnabled !== false;
   let totalPage = data.totalPage || 1;
   let totalComments = data.totalComments || 0;
   let currentPage = data.currentPage || 1;
@@ -124,8 +125,7 @@
     totalPage = data.totalPage || 1;
     totalComments = data.totalComments || 0;
     currentPage = data.currentPage || 1;
-    currentPage = data.currentPage || 1;
-    commentsEnabled = data.commentsEnabled;
+    commentsEnabled = data.commentsEnabled !== false;
     refreshKey++;
   }
 

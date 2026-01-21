@@ -85,6 +85,8 @@
     "input-style-modal": "Modal",
     "input-style-inline": "Inline Input",
     "comments-enabled": "Enable Comments",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
     "comments-enabled-success": "Comments enabled successfully.",
     "comments-disabled-success": "Comments disabled successfully."
   }

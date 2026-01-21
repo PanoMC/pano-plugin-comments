@@ -85,6 +85,8 @@
     "input-style-modal": "Modal (Pencere)",
     "input-style-inline": "Satır İçi (Inline)",
     "comments-enabled": "Yorumları Etkinleştir",
+    "enabled": "Etkin",
+    "disabled": "Devre Dışı",
     "comments-enabled-success": "Yorumlar başarıyla etkinleştirildi.",
     "comments-disabled-success": "Yorumlar başarıyla devre dışı bırakıldı."
   }
