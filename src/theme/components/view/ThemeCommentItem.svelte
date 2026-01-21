@@ -103,7 +103,7 @@
             </div>
             {#if session?.user?.username === comment.username}
               <button
-                class="btn btn-link ms-2"
+                class="btn btn-link ms-2 pe-0"
                 type="button"
                 on:click={() => deleteComment(comment.id)}
                 title={$_('pages.comments.table.delete')}>
@@ -129,7 +129,7 @@
           {/if}
           {#if likesEnabled}
             <button
-              class="btn btn-link text-decoration-none"
+              class="btn btn-link text-decoration-none ps-0"
               class:link-danger={comment.isLiked}
               type="button"
               on:click={() => toggleLike(comment)}
