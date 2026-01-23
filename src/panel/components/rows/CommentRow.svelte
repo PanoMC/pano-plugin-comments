@@ -127,7 +127,7 @@
     <div class="dropdown position-static">
       <button
         type="button"
-        class="btn btn-sm btn-link"
+        class="btn btn-link"
         data-bs-toggle="dropdown"
         title={$_('pages.comments.table.actions')}>
         <span class="fas fa-ellipsis-v"></span>
@@ -187,7 +187,7 @@
             title={$_('buttons.view')}
             aria-label={$_('buttons.view')}
             type="button"
-            class="btn btn-link btn-sm btn-sm"
+            class="btn btn-link"
             on:click={toggleReplies}
             disabled={loadingReplies}>
             <i class="fas fa-caret-down me-2 caret-icon" class:open={showReplies}></i>
@@ -230,7 +230,7 @@
         <div class="dropdown position-static">
           <button
             type="button"
-            class="btn btn-sm btn-link"
+            class="btn btn-link"
             data-bs-toggle="dropdown"
             title={$_('pages.comments.table.actions')}>
             <span class="fas fa-ellipsis-v"></span>
@@ -310,7 +310,7 @@
       <td colspan="4">
         <button
           type="button"
-          class="btn btn-link btn-sm ps-0"
+          class="btn btn-link ps-0"
           on:click={fetchReplies}
           disabled={loadingReplies}>
           {$_('pages.comments.table.load-more-replies', {
@@ -323,12 +323,12 @@
 {/if}
 
 <script>
-  import {_} from '../../../main.js';
-  import {Date} from '@panomc/sdk/components';
-  import {base, page} from '@panomc/sdk/svelte';
-  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
-  import {showToast} from '@panomc/sdk/toasts';
-  import {copy} from '@panomc/sdk/utils/text';
+  import { _ } from '../../../main.js';
+  import { Date } from '@panomc/sdk/components';
+  import { base, page } from '@panomc/sdk/svelte';
+  import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { showToast } from '@panomc/sdk/toasts';
+  import { copy } from '@panomc/sdk/utils/text';
 
   export let comment;
   export let onDelete;
