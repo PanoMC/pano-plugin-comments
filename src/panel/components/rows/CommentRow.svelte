@@ -323,12 +323,12 @@
 {/if}
 
 <script>
-  import { _ } from '../../../main.js';
-  import { Date } from '@panomc/sdk/components';
-  import { base, page } from '@panomc/sdk/svelte';
-  import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
-  import { showToast } from '@panomc/sdk/toasts';
-  import { copy } from '@panomc/sdk/utils/text';
+  import {_} from '../../../main.js';
+  import {Date} from '@panomc/sdk/components/panel';
+  import {base, page} from '@panomc/sdk/svelte';
+  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+  import {showToast} from '@panomc/sdk/toasts';
+  import {copy} from '@panomc/sdk/utils/text';
 
   export let comment;
   export let onDelete;

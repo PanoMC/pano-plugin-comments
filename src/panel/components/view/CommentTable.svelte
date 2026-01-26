@@ -66,11 +66,11 @@
 </div>
 
 <script>
-    import {_} from '../../../main.js';
-    import {NoContent, Pagination} from '@panomc/sdk/components';
-    import CommentRow from '../rows/CommentRow.svelte';
+  import {_} from '../../../main.js';
+  import {NoContent, Pagination} from '@panomc/sdk/components/panel';
+  import CommentRow from '../rows/CommentRow.svelte';
 
-    export let comments = [];
+  export let comments = [];
   export let commentCount = 0;
   export let page = 1;
   export let totalPage = 1;

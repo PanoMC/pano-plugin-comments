@@ -201,10 +201,10 @@
 </div>
 
 <script>
-    import {_} from '../../../main.js';
-    import {Date} from '@panomc/sdk/components';
+  import {_} from '../../../main.js';
+  import {Date} from '@panomc/sdk/components/theme';
 
-    export let comment;
+  export let comment;
   export let isReply = false;
   export let isLast = false;
   export let session;

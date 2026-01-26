@@ -122,24 +122,24 @@
 <AddCommentModal />
 
 <script>
-    import {page} from '@panomc/sdk/svelte';
-    import {get} from 'svelte/store';
-    import {_} from '../../../main.js';
-    import {NoContent, Pagination} from '@panomc/sdk/components';
-    import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
-    import {hasPermission} from '@panomc/sdk/utils/auth';
-    import ConfirmDeleteCommentModal, {
-        setCallback as setDeleteCallback,
-        show as showDeleteModal,
-    } from '../modals/ConfirmDeleteCommentModal.svelte';
-    import {showToast} from '@panomc/sdk/toasts';
-    import ThemeCommentItem from './ThemeCommentItem.svelte';
-    import AddCommentModal, {
-        setCallback as setAddCallback,
-        show as showAddModal,
-    } from '../modals/AddCommentModal.svelte';
+  import {page} from '@panomc/sdk/svelte';
+  import {get} from 'svelte/store';
+  import {_} from '../../../main.js';
+  import {NoContent, Pagination} from '@panomc/sdk/components/theme';
+  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+  import {hasPermission} from '@panomc/sdk/utils/auth';
+  import ConfirmDeleteCommentModal, {
+    setCallback as setDeleteCallback,
+    show as showDeleteModal,
+  } from '../modals/ConfirmDeleteCommentModal.svelte';
+  import {showToast} from '@panomc/sdk/toasts';
+  import ThemeCommentItem from './ThemeCommentItem.svelte';
+  import AddCommentModal, {
+    setCallback as setAddCallback,
+    show as showAddModal,
+  } from '../modals/AddCommentModal.svelte';
 
-    // Props
+  // Props
   export let post;
 
   // State
