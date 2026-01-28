@@ -1,6 +1,6 @@
-import {PanoPlugin, viewComponent} from '@panomc/sdk';
-import {derived} from 'svelte/store';
-import {_ as i18n} from '@panomc/sdk/utils/language';
+import { PanoPlugin, viewComponent } from '@panomc/sdk';
+import { derived } from 'svelte/store';
+import { _ as i18n } from '@panomc/sdk/utils/language';
 import ApiUtil from '@panomc/sdk/utils/api';
 
 const pluginId = 'pano-plugin-comments';
@@ -93,7 +93,7 @@ export default class PanoPluginComments extends PanoPlugin {
       });
 
       pano.ui.hook.register({
-        name: 'panel:plugin-detail:content',
+        name: `panel:plugin-detail:content:${pluginId}`,
         component: viewComponent(
           () => import('./panel/components/view/CommentPluginSettings.svelte'),
         ),
@@ -132,7 +132,7 @@ export default class PanoPluginComments extends PanoPlugin {
     }
   }
 
-  onContextUpdate(ctx) {}
+  onContextUpdate(ctx) { }
 
-  onUnload() {}
+  onUnload() { }
 }

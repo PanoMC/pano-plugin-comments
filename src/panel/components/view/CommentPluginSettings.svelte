@@ -3,7 +3,7 @@
     <div class="card-header">
       {$_('settings.title', { default: 'Preferences' })}
     </div>
-    <div class="card-body animate__animated animate__fadeIn">
+    <div class="card-body">
       <!-- Replies -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="repliesEnabled">
