@@ -147,7 +147,7 @@
   <td class="align-middle">
     #{comment.id}
   </td>
-  <td>
+  <td class="align-middle pe-0">
     <a
       title={$_('buttons.view')}
       aria-label={$_('buttons.view')}
@@ -160,42 +160,43 @@
         height="32"
         alt={comment.username} />
       {comment.username}
-      {#if comment.userGroup && comment.userGroup.name !== 'default'}
-        <span class="badge text-bg-secondary text-decoration-none">
-          {comment.userGroup.displayName}
-        </span>
-      {/if}
     </a>
   </td>
+  <td class="align-middle ps-2">
+    {#if comment.userGroup && comment.userGroup.name !== 'default'}
+      <span class="badge text-bg-secondary">
+        {comment.userGroup.displayName}
+      </span>
+    {/if}
+  </td>
   <td class="align-middle">
-    <div class="d-flex flex-column gap-2">
-      <div class="text-truncate" style="max-width: 400px;" title={comment.content}>
-        {comment.content}
-      </div>
-      <div class="d-flex align-items-center gap-2">
-        <a
-          title={$_('buttons.edit')}
-          aria-label={$_('buttons.edit')}
-          href="{base}/posts/detail/{comment.postId}">
-          {$_('pages.comments.table.post-id', {
-            values: { postId: comment.postId },
-          })}
-        </a>
+    <div class="text-truncate" style="max-width: 400px;" title={comment.content}>
+      {comment.content}
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <a
+        class="btn btn-link ps-0"
+        title={$_('buttons.edit')}
+        aria-label={$_('buttons.edit')}
+        href="{base}/posts/detail/{comment.postId}">
+        {$_('pages.comments.table.post-id', {
+          values: { postId: comment.postId },
+        })}
+      </a>
 
-        {#if !isReply && comment.replyCount > 0}
-          <button
-            title={$_('buttons.view')}
-            aria-label={$_('buttons.view')}
-            type="button"
-            class="btn btn-link"
-            on:click={toggleReplies}
-            disabled={loadingReplies}>
-            <i class="fas fa-caret-down me-2 caret-icon" class:open={showReplies}></i>
-            {comment.replyCount}
-            {$_('pages.comments.table.replies')}
-          </button>
-        {/if}
-      </div>
+      {#if !isReply && comment.replyCount > 0}
+        <button
+          title={$_('buttons.view')}
+          aria-label={$_('buttons.view')}
+          type="button"
+          class="btn btn-link"
+          on:click={toggleReplies}
+          disabled={loadingReplies}>
+          <i class="fas fa-caret-down me-2 caret-icon" class:open={showReplies}></i>
+          {comment.replyCount}
+          {$_('pages.comments.table.replies')}
+        </button>
+      {/if}
     </div>
   </td>
   <td class="align-middle">
@@ -210,7 +211,7 @@
   {#if comment.hiddenAbove > 0}
     <tr class="reply-row" class:highlighted-block={highlighted}>
       <td colspan="2"></td>
-      <td colspan="4" class="py-1">
+      <td colspan="5" class="py-1">
         <span class="small ps-2">
           <i class="fas fa-ellipsis-h me-2"></i>
           {$_('pages.comments.table.hidden-replies-above', {
@@ -253,7 +254,7 @@
       <td class="align-middle">
         <span class="small ps-2">#{reply.id}</span>
       </td>
-      <td class="position-relative">
+      <td class="position-relative pe-0">
         <div class="reply-line ps-2"></div>
         <a
           title={$_('buttons.view')}
@@ -267,14 +268,16 @@
             class="rounded-circle"
             alt={reply.username} />
           <span class="small">{reply.username}</span>
-          {#if reply.userGroup && reply.userGroup.name !== 'default'}
-            <span class="badge text-bg-secondary">
-              {reply.userGroup.displayName}
-            </span>
-          {/if}
         </a>
       </td>
-      <td>
+      <td class="align-middle ps-2">
+        {#if reply.userGroup && reply.userGroup.name !== 'default'}
+          <span class="badge text-bg-secondary">
+            {reply.userGroup.displayName}
+          </span>
+        {/if}
+      </td>
+      <td class="align-middle">
         <div class="text-truncate small ps-2" style="max-width: 400px;" title={reply.content}>
           {reply.content}
         </div>
@@ -294,7 +297,7 @@
   {#if comment.hiddenBelow > 0}
     <tr class="reply-row" class:last-reply={!repliesHasMore} class:highlighted-block={highlighted}>
       <td colspan="2"></td>
-      <td colspan="4" class="py-1">
+      <td colspan="5" class="py-1">
         <span class="small ps-2">
           <i class="fas fa-ellipsis-h me-2"></i>
           {$_('pages.comments.table.hidden-replies-below', {
@@ -307,7 +310,7 @@
   {#if repliesHasMore}
     <tr class="reply-row last-reply" class:highlighted-block={highlighted}>
       <td colspan="2"></td>
-      <td colspan="4">
+      <td colspan="5">
         <button
           type="button"
           class="btn btn-link ps-0"
@@ -323,12 +326,12 @@
 {/if}
 
 <script>
-  import {_} from '../../../main.js';
-  import {Date} from '@panomc/sdk/components/panel';
-  import {base, page} from '@panomc/sdk/svelte';
-  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
-  import {showToast} from '@panomc/sdk/toasts';
-  import {copy} from '@panomc/sdk/utils/text';
+  import { _ } from '../../../main.js';
+  import { Date } from '@panomc/sdk/components/panel';
+  import { base, page } from '@panomc/sdk/svelte';
+  import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { showToast } from '@panomc/sdk/toasts';
+  import { copy } from '@panomc/sdk/utils/text';
 
   export let comment;
   export let onDelete;

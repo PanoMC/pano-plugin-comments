@@ -10,6 +10,7 @@
       "table": {
         "id": "ID",
         "author": "Author",
+        "authority": "Rank",
         "comment": "Comment",
         "likes": "Likes",
         "replies": "Replies",
