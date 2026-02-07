@@ -44,6 +44,8 @@
       "load-more-replies": "Load More Replies ({count})",
       "load-more": "Load More",
       "no-comments": "No comments yet. Be the first to comment!",
+      "close": "Close",
+      "avatar_alt": "Avatar",
       "modals": {
         "delete": {
           "title": "Delete Comment",

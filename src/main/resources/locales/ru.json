@@ -1,0 +1,96 @@
+{
+    "buttons": {
+        "edit": "Редактировать",
+        "view": "Посмотреть"
+    },
+    "pages": {
+        "comments": {
+            "title": "Комментарии",
+            "table-title": "{commentCount} Комментариев",
+            "table": {
+                "id": "ID",
+                "author": "Автор",
+                "authority": "Ранг",
+                "comment": "Комментарий",
+                "likes": "Лайки",
+                "replies": "Ответы",
+                "date": "Дата",
+                "actions": "Действия",
+                "post-id": "Пост: #{postId}",
+                "delete": "Удалить",
+                "no-comments": "Комментариев пока нет.",
+                "copy-link": "Копировать ссылку",
+                "highlighted-comment": "Выделенный комментарий",
+                "hidden-replies-above": "{count} ответов скрыто выше",
+                "hidden-replies-below": "{count} ответов скрыто ниже",
+                "load-more-replies": "Загрузить больше ответов ({count})"
+            }
+        }
+    },
+    "components": {
+        "comments": {
+            "placeholder": "Поделитесь своим комментарием...",
+            "add-comment": "Добавить комментарий",
+            "send": "Отправить",
+            "just-now": "Только что",
+            "n-minutes-ago": "{count} минут назад",
+            "count": "Комментарии ({count})",
+            "reply": "Ответить",
+            "like": "Нравится",
+            "reply-placeholder": "Напишите ваш ответ...",
+            "login-required": "Вы должны войти в систему, чтобы оставить комментарий.",
+            "no-permission": "У вас нет прав на оставление комментариев.",
+            "closed": "Комментарии к этому посту отключены.",
+            "load-more-replies": "Загрузить больше ответов ({count})",
+            "load-more": "Загрузить больше",
+            "no-comments": "Комментариев пока нет. Будьте первым!",
+            "close": "Закрыть",
+            "avatar_alt": "Аватар",
+            "modals": {
+                "delete": {
+                    "title": "Удалить комментарий",
+                    "description": "Вы уверены, что хотите безвозвратно удалить этот комментарий?",
+                    "confirm": "Да",
+                    "cancel": "Отмена"
+                }
+            }
+        }
+    },
+    "toasts": {
+        "add-success": "Комментарий успешно добавлен.",
+        "add-error": "Не удалось добавить комментарий.",
+        "delete-success": "Комментарий успешно удален.",
+        "copy-success": "Ссылка успешно скопирована!",
+        "rate-limited": "Пожалуйста, подождите перед повторным комментированием."
+    },
+    "permissions": {
+        "MANAGE_COMMENTS": {
+            "title": "Управление комментариями",
+            "description": "Может просматривать и удалять комментарии."
+        }
+    },
+    "settings": {
+        "title": "Настройки",
+        "replies-enabled": "Включить ответы",
+        "replies-enabled-desc": "Разрешить пользователям отвечать на комментарии",
+        "likes-enabled": "Включить лайки",
+        "likes-enabled-desc": "Разрешить пользователям ставить лайки комментариям",
+        "pagination-type": "Тип пагинации",
+        "pagination-classic": "Классическая пагинация",
+        "pagination-load-more": "Загрузить еще",
+        "comment-permission": "Разрешение на комментарии",
+        "comment-permission-desc": "Оставьте пустым, чтобы разрешить всем комментировать",
+        "reply-permission": "Разрешение на ответы",
+        "reply-permission-desc": "Оставьте пустым, чтобы разрешить всем отвечать",
+        "cooldown": "Задержка (секунды)",
+        "cooldown-desc": "Минимальное время (в секундах) между комментариями",
+        "input-style": "Стиль ввода",
+        "input-style-modal": "Модальное окно",
+        "input-style-inline": "Встроенный ввод",
+        "comments-enabled": "Включить комментарии",
+        "enabled": "Включено",
+        "disabled": "Отключено",
+        "comments-enabled-success": "Комментарии успешно включены.",
+        "comments-disabled-success": "Комментарии успешно отключены."
+    }
+}

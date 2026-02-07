@@ -44,6 +44,8 @@
       "load-more-replies": "Daha Fazla Yanıt Yükle ({count})",
       "load-more": "Daha Fazla Yükle",
       "no-comments": "Henüz yorum yapılmamış. İlk yorumu sen yap!",
+      "close": "Kapat",
+      "avatar_alt": "Avatar",
       "modals": {
         "delete": {
           "title": "Yorumu Sil",

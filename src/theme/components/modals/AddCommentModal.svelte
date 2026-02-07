@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{$_('pages.comments.title')}</h5>
-        <button type="button" class="btn-close" on:click={hide} aria-label="Close"></button>
+        <button type="button" class="btn-close" on:click={hide} aria-label={$_('components.comments.close')}></button>
       </div>
       <div class="modal-body">
         <div class="d-flex gap-2">
@@ -13,7 +13,7 @@
               class="rounded-circle"
               width="40"
               height="40"
-              alt="avatar" />
+              alt={$_('components.comments.avatar_alt')} />
           </div>
           <div class="flex-grow-1">
             <textarea
@@ -40,9 +40,9 @@
 </div>
 
 <script context="module">
-    import {get, writable} from 'svelte/store';
+  import {get, writable} from 'svelte/store';
 
-    const modalElement = writable();
+  const modalElement = writable();
   let callback = (content) => {};
   let modal;
 
