@@ -41,8 +41,10 @@ class CommentsPlugin : PanoPlugin() {
 
     override suspend fun onEnable() {
         logger.info("Enabled!")
+    }
 
-        startPlugin()
+    override suspend fun onDisable() {
+        isInitialized = false
     }
 
     override suspend fun onUninstall() {
