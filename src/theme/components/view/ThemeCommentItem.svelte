@@ -141,7 +141,15 @@
         </div>
 
         {#if comment.showReplyBox}
-          <div class="my-2 animate__animated animate__fadeIn">
+          <div class="my-2 animate__animated animate__fadeIn position-relative">
+            <button
+              class="btn btn-link btn-sm position-absolute top-0 end-0 p-1 text-muted"
+              type="button"
+              on:click={() => toggleReply(comment)}
+              title={$_('components.comments.cancel')}
+              style="z-index: 1; line-height: 1;">
+              <i class="fas fa-times"></i>
+            </button>
             <div class="d-flex gap-2">
               <textarea
                 class="form-control"

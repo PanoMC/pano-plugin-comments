@@ -71,23 +71,25 @@
   <!-- Comments Area with Local Re-creation -->
   {#key refreshKey}
     <div class="list-group">
-      {#each comments as comment (comment.id)}
-        <div class="list-group-item">
-          <ThemeCommentItem
-            {comment}
-            {session}
-            {deleteComment}
-            {toggleReply}
-            {toggleLike}
-            {addComment}
-            {fetchReplies}
-            {likesEnabled}
-            {repliesEnabled}
-            {canReply} />
-        </div>
-      {:else}
+      {#if comments.length === 0}
         <NoContent text={$_('components.comments.no-comments')} />
-      {/each}
+      {:else}
+        {#each comments as comment (comment.id)}
+          <div class="list-group-item">
+            <ThemeCommentItem
+              {comment}
+              {session}
+              {deleteComment}
+              {toggleReply}
+              {toggleLike}
+              {addComment}
+              {fetchReplies}
+              {likesEnabled}
+              {repliesEnabled}
+              {canReply} />
+          </div>
+        {/each}
+      {/if}
     </div>
 
     <!-- Pagination or Load More -->
@@ -122,24 +124,24 @@
 <AddCommentModal />
 
 <script>
-  import {page} from '@panomc/sdk/svelte';
-  import {get} from 'svelte/store';
-  import {_} from '../../../main.js';
-  import {NoContent, Pagination} from '@panomc/sdk/components/theme';
-  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
-  import {hasPermission} from '@panomc/sdk/utils/auth';
-  import ConfirmDeleteCommentModal, {
-    setCallback as setDeleteCallback,
-    show as showDeleteModal,
-  } from '../modals/ConfirmDeleteCommentModal.svelte';
-  import {showToast} from '@panomc/sdk/toasts';
-  import ThemeCommentItem from './ThemeCommentItem.svelte';
-  import AddCommentModal, {
-    setCallback as setAddCallback,
-    show as showAddModal,
-  } from '../modals/AddCommentModal.svelte';
+    import {page} from '@panomc/sdk/svelte';
+    import {get} from 'svelte/store';
+    import {_} from '../../../main.js';
+    import {NoContent, Pagination} from '@panomc/sdk/components/theme';
+    import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+    import {hasPermission} from '@panomc/sdk/utils/auth';
+    import ConfirmDeleteCommentModal, {
+        setCallback as setDeleteCallback,
+        show as showDeleteModal,
+    } from '../modals/ConfirmDeleteCommentModal.svelte';
+    import {showToast} from '@panomc/sdk/toasts';
+    import ThemeCommentItem from './ThemeCommentItem.svelte';
+    import AddCommentModal, {
+        setCallback as setAddCallback,
+        show as showAddModal,
+    } from '../modals/AddCommentModal.svelte';
 
-  // Props
+    // Props
   export let post;
 
   // State
@@ -189,11 +191,13 @@
       if (deletedFromReplies) {
         comments = newComments;
         totalComments--;
+        refreshKey++;
       } else {
         const oldCount = comments.length;
         comments = comments.filter((c) => c.id !== id);
         if (comments.length < oldCount) {
           totalComments--;
+          refreshKey++;
         }
       }
     });
@@ -303,6 +307,7 @@
         } else {
           comments = [newComment, ...comments];
           totalComments++;
+          refreshKey++;
         }
         showToast($_('toasts.add-success'));
       }

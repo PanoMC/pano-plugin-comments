@@ -252,6 +252,20 @@ class CommentDaoImpl : CommentDao() {
         return rows.toEntities().getOrNull(0)
     }
 
+    override suspend fun getLastRootCommentByUserId(userId: Long, sqlClient: SqlClient): Comment? {
+        val query =
+            "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `userId` = ? AND `parentId` IS NULL ORDER BY `createdAt` DESC LIMIT 1"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+        return rows.toEntities().getOrNull(0)
+    }
+
+    override suspend fun getLastReplyByUserId(userId: Long, sqlClient: SqlClient): Comment? {
+        val query =
+            "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `userId` = ? AND `parentId` IS NOT NULL ORDER BY `createdAt` DESC LIMIT 1"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+        return rows.toEntities().getOrNull(0)
+    }
+
     override suspend fun uninstall(sqlClient: SqlClient) {
         sqlClient.query("DROP TABLE IF EXISTS `${getTablePrefix() + tableName}`").execute().coAwait()
     }

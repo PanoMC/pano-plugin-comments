@@ -112,7 +112,11 @@ class AddCommentAPI(
         }
 
         if (configManager.config.cooldown > 0) {
-            val lastComment = commentDao.getLastCommentByUserId(userId, sqlClient)
+            val lastComment = if (parentId != null) {
+                commentDao.getLastReplyByUserId(userId, sqlClient)
+            } else {
+                commentDao.getLastRootCommentByUserId(userId, sqlClient)
+            }
             if (lastComment != null) {
                 val diff = System.currentTimeMillis() - lastComment.createdAt
                 if (diff < configManager.config.cooldown * 1000L) {
