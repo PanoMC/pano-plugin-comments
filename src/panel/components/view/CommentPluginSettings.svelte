@@ -1,21 +1,17 @@
 {#if addon?.id === 'pano-plugin-comments'}
   <div class="card">
     <div class="card-header">
-      {$_('settings.title', { default: 'Preferences' })}
+      {$_('settings.title')}
     </div>
     <div class="card-body">
       <!-- Replies -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="repliesEnabled">
           <span class="d-block">
-            {$_('settings.replies-enabled', {
-              default: 'Enable Replies',
-            })}
+            {$_('settings.replies-enabled')}
           </span>
           <small>
-            {$_('settings.replies-enabled-desc', {
-              default: 'Allow users to reply to comments',
-            })}
+            {$_('settings.replies-enabled-desc')}
           </small>
         </label>
         <div class="col-md-6 d-flex align-items-center">
@@ -33,14 +29,10 @@
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="likesEnabled">
           <span class="d-block">
-            {$_('settings.likes-enabled', {
-              default: 'Enable Likes',
-            })}
+            {$_('settings.likes-enabled')}
           </span>
           <small>
-            {$_('settings.likes-enabled-desc', {
-              default: 'Allow users to like comments',
-            })}
+            {$_('settings.likes-enabled-desc')}
           </small>
         </label>
         <div class="col-md-6 d-flex align-items-center">
@@ -57,9 +49,7 @@
       <!-- Comment Permission -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="commentPermission">
-          {$_('settings.comment-permission', {
-            default: 'Comment Permission',
-          })}
+          {$_('settings.comment-permission')}
         </label>
         <div class="col-md-6">
           <input
@@ -69,9 +59,7 @@
             placeholder="pano.plugin.comments.create"
             bind:value={config.commentPermission} />
           <small class="d-block mt-2">
-            {$_('settings.comment-permission-desc', {
-              default: 'Leave empty to allow everyone to comment',
-            })}
+            {$_('settings.comment-permission-desc')}
           </small>
         </div>
       </div>
@@ -79,9 +67,7 @@
       <!-- Reply Permission -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="replyPermission">
-          {$_('settings.reply-permission', {
-            default: 'Reply Permission',
-          })}
+          {$_('settings.reply-permission')}
         </label>
         <div class="col-md-6">
           <input
@@ -91,9 +77,7 @@
             placeholder="pano.plugin.comments.reply"
             bind:value={config.replyPermission} />
           <small class="d-block mt-2">
-            {$_('settings.reply-permission-desc', {
-              default: 'Leave empty to allow everyone to reply',
-            })}
+            {$_('settings.reply-permission-desc')}
           </small>
         </div>
       </div>
@@ -101,9 +85,7 @@
       <!-- Cooldown -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="cooldown">
-          {$_('settings.cooldown', {
-            default: 'Cooldown (Seconds)',
-          })}
+          {$_('settings.cooldown')}
         </label>
         <div class="col-md-6">
           <input
@@ -113,9 +95,7 @@
             min="0"
             bind:value={config.cooldown} />
           <small class="d-block mt-2">
-            {$_('settings.cooldown-desc', {
-              default: 'Minimum time (in seconds) between comments',
-            })}
+            {$_('settings.cooldown-desc')}
           </small>
         </div>
       </div>
@@ -123,9 +103,7 @@
       <!-- Input Style -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="inputStyle1">
-          {$_('settings.input-style', {
-            default: 'Input Style',
-          })}
+          {$_('settings.input-style')}
         </label>
         <div class="col-md-6">
           <div class="btn-group w-100" role="group">
@@ -137,9 +115,7 @@
               value="MODAL"
               bind:group={config.inputStyle} />
             <label class="btn btn-outline-primary" for="inputStyle1">
-              {$_('settings.input-style-modal', {
-                default: 'Modal',
-              })}
+              {$_('settings.input-style-modal')}
             </label>
 
             <input
@@ -150,9 +126,7 @@
               value="INLINE"
               bind:group={config.inputStyle} />
             <label class="btn btn-outline-primary" for="inputStyle2">
-              {$_('settings.input-style-inline', {
-                default: 'Inline Input',
-              })}
+              {$_('settings.input-style-inline')}
             </label>
           </div>
         </div>
@@ -161,9 +135,7 @@
       <!-- Pagination -->
       <div class="row mb-3">
         <label class="col-md-6 col-form-label" for="paginationType1">
-          {$_('settings.pagination-type', {
-            default: 'Pagination Type',
-          })}
+          {$_('settings.pagination-type')}
         </label>
         <div class="col-md-6">
           <div class="btn-group w-100" role="group">
@@ -175,9 +147,7 @@
               value="PAGINATION"
               bind:group={config.paginationType} />
             <label class="btn btn-outline-primary" for="paginationType1">
-              {$_('settings.pagination-classic', {
-                default: 'Classic Pagination',
-              })}
+              {$_('settings.pagination-classic')}
             </label>
 
             <input
@@ -188,9 +158,7 @@
               value="LOAD_MORE"
               bind:group={config.paginationType} />
             <label class="btn btn-outline-primary" for="paginationType2">
-              {$_('settings.pagination-load-more', {
-                default: 'Load More',
-              })}
+              {$_('settings.pagination-load-more')}
             </label>
           </div>
         </div>
@@ -202,7 +170,7 @@
             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
             ></span>
           {:else}{/if}
-          {$_('generic.save', { default: 'Save' })}
+          {$_('generic.save')}
         </button>
       </div>
     </div>
@@ -210,9 +178,9 @@
 {/if}
 
 <script>
-  import { _ } from '../../../main.js';
+  import {_} from '../../../main.js';
   import ApiUtil from '@panomc/sdk/utils/api';
-  import { showToast } from '@panomc/sdk/toasts';
+  import {showToast} from '@panomc/sdk/toasts';
 
   export let addon;
 

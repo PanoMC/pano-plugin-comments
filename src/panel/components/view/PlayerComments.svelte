@@ -1,6 +1,3 @@
-<style>
-</style>
-
 <div id="pano-player-comments-section">
   {#key refreshKey}
     <CommentTable
@@ -16,9 +13,9 @@
 <ConfirmDeleteCommentModal />
 
 <script context="module">
-    import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
 
-    export async function load(event) {
+  export async function load(event) {
     const {
       url: { searchParams },
       params,
