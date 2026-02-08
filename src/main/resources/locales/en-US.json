@@ -1,4 +1,7 @@
 {
+  "generic": {
+    "save": "Save"
+  },
   "buttons": {
     "edit": "Edit",
     "view": "View"

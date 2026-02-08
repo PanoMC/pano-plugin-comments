@@ -1,4 +1,7 @@
 {
+  "generic": {
+    "save": "Kaydet"
+  },
   "buttons": {
     "edit": "Düzenle",
     "view": "Görüntüle"
