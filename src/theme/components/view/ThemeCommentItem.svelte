@@ -117,7 +117,7 @@
         </p>
 
         <div class="d-flex gap-3 align-items-center my-2">
-          {#if !isReply && session?.user && repliesEnabled && canReply}
+          {#if !isReply && session?.user && repliesEnabled && canReply && commentsEnabled}
             <button
               title={$_('components.comments.reply')}
               aria-label={$_('components.comments.reply')}
@@ -184,7 +184,8 @@
           {fetchReplies}
           {likesEnabled}
           {repliesEnabled}
-          {canReply} />
+          {canReply}
+          {commentsEnabled} />
       {/each}
     {/if}
 
@@ -224,6 +225,7 @@
   export let likesEnabled = true;
   export let repliesEnabled = true;
   export let canReply = true;
+  export let commentsEnabled = true;
 
   // We use <svelte:self> for recursion
 </script>
