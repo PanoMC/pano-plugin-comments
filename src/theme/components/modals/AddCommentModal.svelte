@@ -19,6 +19,7 @@
             <textarea
               class="form-control"
               rows="4"
+              autocomplete="off"
               placeholder={$_('components.comments.placeholder')}
               style="resize: none;"
               bind:value={content}

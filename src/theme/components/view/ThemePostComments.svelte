@@ -35,6 +35,7 @@
           <textarea
             class="form-control mb-2"
             rows="3"
+            autocomplete="off"
             placeholder={$_('components.comments.placeholder')}
             bind:value={newCommentContent}></textarea>
           <div class="d-flex justify-content-end">

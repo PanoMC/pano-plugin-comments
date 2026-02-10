@@ -154,6 +154,7 @@
               <textarea
                 class="form-control"
                 rows="2"
+                autocomplete="off"
                 placeholder={$_('components.comments.reply-placeholder')}
                 style="resize: none;"
                 bind:value={comment.replyContent}></textarea>
