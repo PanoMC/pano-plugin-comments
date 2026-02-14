@@ -106,7 +106,8 @@
                 class="btn btn-link ms-2 pe-0"
                 type="button"
                 on:click={() => deleteComment(comment.id)}
-                title={$_('pages.comments.table.delete')}>
+                use:tooltip={[$_('pages.comments.table.delete')]}
+                aria-label={$_('pages.comments.table.delete')}>
                 <i class="fas fa-trash-alt"></i>
               </button>
             {/if}
@@ -119,7 +120,7 @@
         <div class="d-flex gap-3 align-items-center my-2">
           {#if !isReply && session?.user && repliesEnabled && canReply && commentsEnabled}
             <button
-              title={$_('components.comments.reply')}
+              use:tooltip={[$_('components.comments.reply')]}
               aria-label={$_('components.comments.reply')}
               class="btn btn-link"
               type="button"
@@ -133,6 +134,8 @@
               class:link-danger={comment.isLiked}
               type="button"
               on:click={() => toggleLike(comment)}
+              use:tooltip={[$_('components.comments.like')]}
+              aria-label={$_('components.comments.like')}
               disabled={!session?.user}>
               <i class="{comment.isLiked ? 'fas' : 'far'} fa-heart me-1"></i>
               {comment.likes > 0 ? comment.likes : ''}
@@ -146,7 +149,8 @@
               class="btn btn-link btn-sm position-absolute top-0 end-0 p-1 text-muted"
               type="button"
               on:click={() => toggleReply(comment)}
-              title={$_('components.comments.cancel')}
+              use:tooltip={[$_('components.comments.cancel')]}
+              aria-label={$_('components.comments.cancel')}
               style="z-index: 1; line-height: 1;">
               <i class="fas fa-times"></i>
             </button>
@@ -213,6 +217,7 @@
 <script>
   import {_} from '../../../main.js';
   import {Date} from '@panomc/sdk/components/theme';
+  import tooltip from '@panomc/sdk/utils/tooltip';
 
   export let comment;
   export let isReply = false;

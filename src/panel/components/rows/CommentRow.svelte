@@ -129,7 +129,8 @@
         type="button"
         class="btn btn-link"
         data-bs-toggle="dropdown"
-        title={$_('pages.comments.table.actions')}>
+        use:tooltip={[$_('pages.comments.table.actions')]}
+        aria-label={$_('pages.comments.table.actions')}>
         <span class="fas fa-ellipsis-v"></span>
       </button>
       <div class="dropdown-menu dropdown-menu-start animate__animated animate__fadeIn">
@@ -149,7 +150,7 @@
   </td>
   <td class="align-middle pe-0">
     <a
-      title={$_('buttons.view')}
+      use:tooltip={[$_('buttons.view')]}
       aria-label={$_('buttons.view')}
       href="{base}/players/detail/{comment.username}"
       class="d-flex align-items-center gap-2">
@@ -170,13 +171,17 @@
     {/if}
   </td>
   <td class="align-middle">
-    <div class="text-truncate" style="max-width: 400px;" title={comment.content}>
+    <div
+      class="text-truncate"
+      style="max-width: 400px;"
+      use:tooltip={[comment.content]}
+      title={comment.content}>
       {comment.content}
     </div>
     <div class="d-flex align-items-center gap-2">
       <a
         class="btn btn-link ps-0"
-        title={$_('buttons.edit')}
+        use:tooltip={[$_('buttons.edit')]}
         aria-label={$_('buttons.edit')}
         href="{base}/posts/detail/{comment.postId}">
         {$_('pages.comments.table.post-id', {
@@ -186,7 +191,7 @@
 
       {#if !isReply && comment.replyCount > 0}
         <button
-          title={$_('buttons.view')}
+          use:tooltip={[$_('buttons.view')]}
           aria-label={$_('buttons.view')}
           type="button"
           class="btn btn-link"
@@ -233,7 +238,8 @@
             type="button"
             class="btn btn-link"
             data-bs-toggle="dropdown"
-            title={$_('pages.comments.table.actions')}>
+            use:tooltip={[$_('pages.comments.table.actions')]}
+            aria-label={$_('pages.comments.table.actions')}>
             <span class="fas fa-ellipsis-v"></span>
           </button>
           <div class="dropdown-menu dropdown-menu-start animate__animated animate__fadeIn">
@@ -257,7 +263,7 @@
       <td class="position-relative pe-0">
         <div class="reply-line ps-2"></div>
         <a
-          title={$_('buttons.view')}
+          use:tooltip={[$_('buttons.view')]}
           aria-label={$_('buttons.view')}
           href="{base}/players/detail/{reply.username}"
           class="d-flex align-items-center gap-2 text-decoration-none text-reset ms-3">
@@ -278,7 +284,11 @@
         {/if}
       </td>
       <td class="align-middle">
-        <div class="text-truncate small ps-2" style="max-width: 400px;" title={reply.content}>
+        <div
+          class="text-truncate small ps-2"
+          style="max-width: 400px;"
+          use:tooltip={[reply.content]}
+          title={reply.content}>
           {reply.content}
         </div>
       </td>
@@ -332,6 +342,7 @@
   import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
   import { showToast } from '@panomc/sdk/toasts';
   import { copy } from '@panomc/sdk/utils/text';
+  import tooltip from '@panomc/sdk/utils/tooltip';
 
   export let comment;
   export let onDelete;
