@@ -7,11 +7,14 @@ import io.vertx.sqlclient.SqlClient
 abstract class CommentDao : Dao<Comment>(Comment::class.java) {
     abstract suspend fun add(comment: Comment, sqlClient: SqlClient): Long
     abstract suspend fun deleteById(id: Long, sqlClient: SqlClient)
+    abstract suspend fun deleteByParentId(id: Long, sqlClient: SqlClient)
+    abstract suspend fun deleteByUserId(userId: Long, sqlClient: SqlClient)
     abstract suspend fun getById(id: Long, sqlClient: SqlClient): Comment?
     abstract suspend fun countByPostId(postId: Long, sqlClient: SqlClient): Long
     abstract suspend fun getByPostId(postId: Long, page: Long? = null, limit: Long? = null, sqlClient: SqlClient): List<Comment>
     abstract suspend fun countRootByPostId(postId: Long, sqlClient: SqlClient): Long
     abstract suspend fun getRootByPostId(postId: Long, page: Long? = null, limit: Long? = null, sqlClient: SqlClient): List<Comment>
+    abstract suspend fun getRootCommentsByUserId(userId: Long, sqlClient: SqlClient): List<Comment>
     abstract suspend fun getAll(page: Long, limit: Long = 10, sqlClient: SqlClient): List<Comment>
     abstract suspend fun count(sqlClient: SqlClient): Long
     abstract suspend fun getAllRoot(page: Long, limit: Long = 10, sqlClient: SqlClient): List<Comment>

@@ -60,6 +60,11 @@ class CommentLikeDaoImpl : CommentLikeDao() {
         sqlClient.preparedQuery(query).execute(Tuple.of(commentId, userId)).coAwait()
     }
 
+    override suspend fun deleteByCommentId(commentId: Long, sqlClient: SqlClient) {
+        val query = "DELETE FROM `${getTablePrefix() + tableName}` WHERE `commentId` = ?"
+        sqlClient.preparedQuery(query).execute(Tuple.of(commentId)).coAwait()
+    }
+
     override suspend fun getByCommentIdAndUserId(commentId: Long, userId: Long, sqlClient: SqlClient): CommentLike? {
         val query = "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `commentId` = ? AND `userId` = ?"
         val rows = sqlClient.preparedQuery(query).execute(Tuple.of(commentId, userId)).coAwait()

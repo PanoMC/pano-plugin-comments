@@ -67,6 +67,16 @@ class CommentDaoImpl : CommentDao() {
         sqlClient.preparedQuery(query).execute(Tuple.of(id)).coAwait()
     }
 
+    override suspend fun deleteByParentId(id: Long, sqlClient: SqlClient) {
+        val query = "DELETE FROM `${getTablePrefix() + tableName}` WHERE `parentId` = ?"
+        sqlClient.preparedQuery(query).execute(Tuple.of(id)).coAwait()
+    }
+
+    override suspend fun deleteByUserId(userId: Long, sqlClient: SqlClient) {
+        val query = "DELETE FROM `${getTablePrefix() + tableName}` WHERE `userId` = ?"
+        sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+    }
+
     override suspend fun getById(id: Long, sqlClient: SqlClient): Comment? {
         val query = "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `id` = ?"
         val rows = sqlClient.preparedQuery(query).execute(Tuple.of(id)).coAwait()
@@ -115,6 +125,13 @@ class CommentDaoImpl : CommentDao() {
             val rows = sqlClient.preparedQuery(query).execute(Tuple.of(postId)).coAwait()
             rows.toEntities()
         }
+    }
+
+    override suspend fun getRootCommentsByUserId(userId: Long, sqlClient: SqlClient): List<Comment> {
+        val query =
+            "SELECT ${fields.toTableQuery()} FROM `${getTablePrefix() + tableName}` WHERE `userId` = ? AND `parentId` IS NULL"
+        val rows = sqlClient.preparedQuery(query).execute(Tuple.of(userId)).coAwait()
+        return rows.toEntities()
     }
 
     override suspend fun getAll(page: Long, limit: Long, sqlClient: SqlClient): List<Comment> {
