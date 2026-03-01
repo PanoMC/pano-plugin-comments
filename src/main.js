@@ -14,8 +14,6 @@ export default class PanoPluginComments extends PanoPlugin {
   onLoad() {
     const pano = this.pano;
 
-    console.log('Hello world! It is enabled, environment:' + pano.isPanel);
-
     if (pano.isPanel) {
       pano.ui.page.register({
         path: '/posts/comments',
