@@ -155,7 +155,7 @@
       href="{base}/players/detail/{comment.username}"
       class="d-flex align-items-center gap-2">
       <img
-        src="https://minotar.net/avatar/{comment.username || 'char'}"
+        src="/api/profile/picture/{comment.username || 'char'}?{$avatarVersion}"
         class="rounded-circle"
         width="32"
         height="32"
@@ -268,7 +268,7 @@
           href="{base}/players/detail/{reply.username}"
           class="d-flex align-items-center gap-2 text-decoration-none text-reset ms-3">
           <img
-            src="https://minotar.net/avatar/{reply.username || 'char'}"
+            src="/api/profile/picture/{reply.username || 'char'}?{$avatarVersion}"
             width="24"
             height="24"
             class="rounded-circle"
@@ -336,13 +336,15 @@
 {/if}
 
 <script>
-  import { _ } from '../../../main.js';
+  import { _, pano } from '../../../main.js';
   import { Date } from '@panomc/sdk/components/panel';
   import { base, page } from '@panomc/sdk/svelte';
   import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
   import { showToast } from '@panomc/sdk/toasts';
   import { copy } from '@panomc/sdk/utils/text';
   import tooltip from '@panomc/sdk/utils/tooltip';
+
+  const avatarVersion = pano.ui.avatar.getVersion();
 
   export let comment;
   export let onDelete;

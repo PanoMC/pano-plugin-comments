@@ -9,7 +9,7 @@
         <div class="d-flex gap-2">
           <div class="flex-shrink-0 d-none d-sm-block">
             <img
-              src="https://minotar.net/avatar/{session?.user?.username || 'char'}"
+              src="/api/profile/picture/{session?.user?.username || 'char'}?{$avatarVersion}"
               class="rounded-circle"
               width="40"
               height="40"
@@ -65,8 +65,10 @@
 </script>
 
 <script>
-  import { _ } from '../../../main.js';
+  import { _ , pano } from '../../../main.js';
   import { page } from '@panomc/sdk/svelte';
+
+  const avatarVersion = pano.ui.avatar.getVersion();
 
   $: session = $page.data.session;
   let content = '';

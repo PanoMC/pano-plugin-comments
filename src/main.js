@@ -10,9 +10,12 @@ export const _ = derived(i18n, ($_fn) => {
   return (key, options) => $_fn(`plugins.${pluginId}.${key}`, options);
 });
 
+export let pano;
+
 export default class PanoPluginComments extends PanoPlugin {
   onLoad() {
-    const pano = this.pano;
+    pano = this.pano;
+    const panoApi = this.pano;
 
     if (pano.isPanel) {
       pano.ui.page.register({
