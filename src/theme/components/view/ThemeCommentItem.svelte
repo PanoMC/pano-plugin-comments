@@ -75,7 +75,7 @@
       <div class="flex-shrink-0">
         <a href="/player/{comment.username}" class="focus-ring rounded-circle">
           <img
-            src="https://minotar.net/avatar/{comment.username}"
+            src="/api/profile/picture/{comment.username}?{$avatarVersion}"
             class="rounded-circle"
             width="32"
             height="32"
@@ -215,9 +215,11 @@
 </div>
 
 <script>
-  import {_} from '../../../main.js';
+  import { _ , pano } from '../../../main.js';
   import {Date} from '@panomc/sdk/components/theme';
   import tooltip from '@panomc/sdk/utils/tooltip';
+
+  const avatarVersion = pano.ui.avatar.getVersion();
 
   export let comment;
   export let isReply = false;
