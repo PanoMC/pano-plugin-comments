@@ -85,7 +85,7 @@
       <div class="flex-grow-1">
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            <a href="/player/{comment.username}">{comment.username}</a>
+            <a class="text-decoration-none fw-bold text-reset" href="/player/{comment.username}">{comment.username}</a>
             {#if comment.userGroup && comment.userGroup.name !== 'default'}
               <span class="badge ms-1">
                 {comment.userGroup.displayName}
