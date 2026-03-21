@@ -70,7 +70,7 @@
     <div class="reply-line" class:is-last={isLast}></div>
   {/if}
 
-  <div class="animate__animated animate__fadeInUp">
+  <div>
     <div class="d-flex gap-3">
       <div class="flex-shrink-0">
         <a href="/player/{comment.username}" class="focus-ring rounded-circle">
@@ -85,7 +85,8 @@
       <div class="flex-grow-1">
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            <a class="text-decoration-none fw-bold text-reset" href="/player/{comment.username}">{comment.username}</a>
+            <a class="text-decoration-none fw-bold text-reset" href="/player/{comment.username}"
+              >{comment.username}</a>
             {#if comment.userGroup && comment.userGroup.name !== 'default'}
               <span class="badge ms-1">
                 {comment.userGroup.displayName}
@@ -93,17 +94,17 @@
             {/if}
           </div>
           <div class="d-flex align-items-center gap-2">
-            <div class="d-none d-sm-block small">
+            <div class="d-none d-sm-block small opacity-50">
               <Date time={comment.createdAt} />
             </div>
-            <div class="d-block d-sm-none">
+            <div class="d-block d-sm-none opacity-50">
               <Date time={comment.createdAt}>
                 <i class="fas fa-calendar-alt"></i>
               </Date>
             </div>
             {#if session?.user?.username === comment.username}
               <button
-                class="btn btn-link ms-2 pe-0"
+                class="btn btn-link link-danger ms-2 pe-0"
                 type="button"
                 on:click={() => deleteComment(comment.id)}
                 use:tooltip={[$_('pages.comments.table.delete')]}
@@ -144,16 +145,7 @@
         </div>
 
         {#if comment.showReplyBox}
-          <div class="my-2 animate__animated animate__fadeIn position-relative">
-            <button
-              class="btn btn-link btn-sm position-absolute top-0 end-0 p-1 text-muted"
-              type="button"
-              on:click={() => toggleReply(comment)}
-              use:tooltip={[$_('components.comments.cancel')]}
-              aria-label={$_('components.comments.cancel')}
-              style="z-index: 1; line-height: 1;">
-              <i class="fas fa-times"></i>
-            </button>
+          <div class="my-2">
             <div class="d-flex gap-2">
               <textarea
                 class="form-control"
@@ -162,11 +154,23 @@
                 placeholder={$_('components.comments.reply-placeholder')}
                 style="resize: none;"
                 bind:value={comment.replyContent}></textarea>
-              <button
-                class="btn btn-secondary align-self-end"
-                type="button"
-                on:click={() => addComment(comment.id, comment.replyContent)}
-                disabled={!comment.replyContent?.trim()}>{$_('components.comments.send')}</button>
+              <div class="hstack gap-2">
+                <button
+                  class="btn-close"
+                  type="button"
+                  on:click={() => toggleReply(comment)}
+                  use:tooltip={[$_('components.comments.cancel')]}
+                  aria-label={$_('components.comments.cancel')}></button>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  on:click={() => addComment(comment.id, comment.replyContent)}
+                  use:tooltip={[$_('components.comments.send')]}
+                  aria-label={$_('components.comments.send')}
+                  disabled={!comment.replyContent?.trim()}>
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
             </div>
           </div>
         {/if}
@@ -215,8 +219,8 @@
 </div>
 
 <script>
-  import { _ , pano } from '../../../main.js';
-  import {Date} from '@panomc/sdk/components/theme';
+  import { _, pano } from '../../../main.js';
+  import { Date } from '@panomc/sdk/components/theme';
   import tooltip from '@panomc/sdk/utils/tooltip';
 
   const avatarVersion = pano.ui.avatar.getVersion();

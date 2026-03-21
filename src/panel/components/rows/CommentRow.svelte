@@ -133,12 +133,12 @@
         aria-label={$_('pages.comments.table.actions')}>
         <span class="fas fa-ellipsis-v"></span>
       </button>
-      <div class="dropdown-menu dropdown-menu-start animate__animated animate__fadeIn">
+      <div class="dropdown-menu dropdown-menu-start">
         <button class="dropdown-item" on:click={() => copyLink(comment.id)} type="button">
           <i class="fas fa-link me-2"></i>
           {$_('pages.comments.table.copy-link')}
         </button>
-        <button type="button" class="dropdown-item" on:click={() => onDelete(comment.id)}>
+        <button type="button" class="dropdown-item link-danger" on:click={() => onDelete(comment.id)}>
           <i class="fas fa-trash me-2"></i>
           {$_('pages.comments.table.delete')}
         </button>
@@ -242,7 +242,7 @@
             aria-label={$_('pages.comments.table.actions')}>
             <span class="fas fa-ellipsis-v"></span>
           </button>
-          <div class="dropdown-menu dropdown-menu-start animate__animated animate__fadeIn">
+          <div class="dropdown-menu dropdown-menu-start">
             <button type="button" class="dropdown-item" on:click={() => copyLink(reply.id)}>
               <i class="fas fa-link me-2"></i>
               {$_('pages.comments.table.copy-link')}

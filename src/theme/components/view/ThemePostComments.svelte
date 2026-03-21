@@ -10,9 +10,7 @@
   }
 </style>
 
-<div
-  class="vstack gap-3 animate__animated animate__fadeIn pano-comments-container mx-auto"
-  id="pano-comments-section">
+<div class="vstack gap-3 pano-comments-container mx-auto pt-5" id="pano-comments-section">
   <div class="text-center">
     <h4 class="mb-0">
       {totalComments > 0
@@ -52,7 +50,7 @@
         </div>
       {:else}
         <div class="d-flex justify-content-center">
-          <button class="btn btn-link text-decoration-none" on:click={showAddModal}>
+          <button class="btn btn-primary text-decoration-none" on:click={showAddModal}>
             <i class="fas fa-plus me-2"></i>
             {$_('components.comments.add-comment')}
           </button>
@@ -126,17 +124,17 @@
 <AddCommentModal />
 
 <script>
-  import {page} from '@panomc/sdk/svelte';
-  import {get} from 'svelte/store';
-  import {_} from '../../../main.js';
-  import {NoContent, Pagination} from '@panomc/sdk/components/theme';
-  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
-  import {hasPermission} from '@panomc/sdk/utils/auth';
+  import { page } from '@panomc/sdk/svelte';
+  import { get } from 'svelte/store';
+  import { _ } from '../../../main.js';
+  import { NoContent, Pagination } from '@panomc/sdk/components/theme';
+  import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { hasPermission } from '@panomc/sdk/utils/auth';
   import ConfirmDeleteCommentModal, {
     setCallback as setDeleteCallback,
     show as showDeleteModal,
   } from '../modals/ConfirmDeleteCommentModal.svelte';
-  import {showToast} from '@panomc/sdk/toasts';
+  import { showToast } from '@panomc/sdk/toasts';
   import ThemeCommentItem from './ThemeCommentItem.svelte';
   import AddCommentModal, {
     setCallback as setAddCallback,
