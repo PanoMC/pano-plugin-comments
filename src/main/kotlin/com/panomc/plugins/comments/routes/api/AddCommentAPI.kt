@@ -16,6 +16,7 @@ import com.panomc.plugins.comments.config.CommentsConfig
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import com.panomc.plugins.comments.db.model.Comment
+import com.panomc.plugins.license.LicenseGuard
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
@@ -62,6 +63,10 @@ class AddCommentAPI(
             .build()
 
     override suspend fun handle(context: RoutingContext): Result {
+        // Anti-tamper: re-assert at a critical write path. Patching out only the
+        // onStart check is not enough to crack the plugin if 5+ call sites assert.
+        LicenseGuard.assert(plugin)
+
         val body = context.body().asJsonObject()
 
         val postId = body.getLong("postId")
