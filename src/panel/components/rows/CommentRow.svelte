@@ -174,8 +174,7 @@
     <div
       class="text-truncate"
       style="max-width: 400px;"
-      use:tooltip={[comment.content]}
-      title={comment.content}>
+      use:tooltip={[comment.content]}>
       {comment.content}
     </div>
     <div class="d-flex align-items-center gap-2">
@@ -287,8 +286,7 @@
         <div
           class="text-truncate small ps-2"
           style="max-width: 400px;"
-          use:tooltip={[reply.content]}
-          title={reply.content}>
+          use:tooltip={[reply.content]}>
           {reply.content}
         </div>
       </td>
