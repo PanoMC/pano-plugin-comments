@@ -129,7 +129,7 @@
         type="button"
         class="btn btn-link"
         data-bs-toggle="dropdown"
-        use:tooltip={[$_('pages.comments.table.actions')]}
+        title={$_('pages.comments.table.actions')}
         aria-label={$_('pages.comments.table.actions')}>
         <span class="fas fa-ellipsis-v"></span>
       </button>
@@ -150,7 +150,7 @@
   </td>
   <td class="align-middle pe-0">
     <a
-      use:tooltip={[$_('buttons.view')]}
+      title={$_('buttons.view')}
       aria-label={$_('buttons.view')}
       href="{base}/players/detail/{comment.username}"
       class="d-flex align-items-center gap-2">
@@ -180,7 +180,7 @@
     <div class="d-flex align-items-center gap-2">
       <a
         class="btn btn-link ps-0"
-        use:tooltip={[$_('buttons.edit')]}
+        title={$_('buttons.edit')}
         aria-label={$_('buttons.edit')}
         href="{base}/posts/detail/{comment.postId}">
         {$_('pages.comments.table.post-id', {
@@ -190,7 +190,7 @@
 
       {#if !isReply && comment.replyCount > 0}
         <button
-          use:tooltip={[$_('buttons.view')]}
+          title={$_('buttons.view')}
           aria-label={$_('buttons.view')}
           type="button"
           class="btn btn-link"
@@ -237,7 +237,7 @@
             type="button"
             class="btn btn-link"
             data-bs-toggle="dropdown"
-            use:tooltip={[$_('pages.comments.table.actions')]}
+            title={$_('pages.comments.table.actions')}
             aria-label={$_('pages.comments.table.actions')}>
             <span class="fas fa-ellipsis-v"></span>
           </button>
@@ -262,7 +262,7 @@
       <td class="position-relative pe-0">
         <div class="reply-line ps-2"></div>
         <a
-          use:tooltip={[$_('buttons.view')]}
+          title={$_('buttons.view')}
           aria-label={$_('buttons.view')}
           href="{base}/players/detail/{reply.username}"
           class="d-flex align-items-center gap-2 text-decoration-none text-reset ms-3">

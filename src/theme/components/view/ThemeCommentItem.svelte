@@ -107,7 +107,7 @@
                 class="btn btn-link link-danger ms-2 pe-0"
                 type="button"
                 on:click={() => deleteComment(comment.id)}
-                use:tooltip={[$_('pages.comments.table.delete')]}
+                title={$_('pages.comments.table.delete')}
                 aria-label={$_('pages.comments.table.delete')}>
                 <i class="fas fa-trash-alt"></i>
               </button>
@@ -121,7 +121,7 @@
         <div class="d-flex gap-3 align-items-center my-2">
           {#if !isReply && session?.user && repliesEnabled && canReply && commentsEnabled}
             <button
-              use:tooltip={[$_('components.comments.reply')]}
+              title={$_('components.comments.reply')}
               aria-label={$_('components.comments.reply')}
               class="btn btn-link"
               type="button"
@@ -135,7 +135,7 @@
               class:link-danger={comment.isLiked}
               type="button"
               on:click={() => toggleLike(comment)}
-              use:tooltip={[$_('components.comments.like')]}
+              title={$_('components.comments.like')}
               aria-label={$_('components.comments.like')}
               disabled={!session?.user}>
               <i class="{comment.isLiked ? 'fas' : 'far'} fa-heart me-1"></i>
@@ -159,13 +159,13 @@
                   class="btn-close"
                   type="button"
                   on:click={() => toggleReply(comment)}
-                  use:tooltip={[$_('components.comments.cancel')]}
+                  title={$_('components.comments.cancel')}
                   aria-label={$_('components.comments.cancel')}></button>
                 <button
                   class="btn btn-primary"
                   type="button"
                   on:click={() => addComment(comment.id, comment.replyContent)}
-                  use:tooltip={[$_('components.comments.send')]}
+                  title={$_('components.comments.send')}
                   aria-label={$_('components.comments.send')}
                   disabled={!comment.replyContent?.trim()}>
                   <i class="fas fa-paper-plane"></i>
@@ -221,7 +221,6 @@
 <script>
   import { _, pano } from '../../../main.js';
   import { Date } from '@panomc/sdk/components/theme';
-  import tooltip from '@panomc/sdk/utils/tooltip';
 
   const avatarVersion = pano.ui.avatar.getVersion();
 
