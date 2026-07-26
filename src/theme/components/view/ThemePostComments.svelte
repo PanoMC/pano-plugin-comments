@@ -126,7 +126,7 @@
 <script>
   import { page } from '@panomc/sdk/svelte';
   import { get } from 'svelte/store';
-  import { _ } from '../../../main.js';
+  import { _, showSuccessToast, showErrorToast } from '../../../main.js';
   import { NoContent, Pagination } from '@panomc/sdk/components/theme';
   import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
   import { hasPermission } from '@panomc/sdk/utils/auth';
@@ -134,7 +134,6 @@
     setCallback as setDeleteCallback,
     show as showDeleteModal,
   } from '../modals/ConfirmDeleteCommentModal.svelte';
-  import { showToast } from '@panomc/sdk/toasts';
   import ThemeCommentItem from './ThemeCommentItem.svelte';
   import AddCommentModal, {
     setCallback as setAddCallback,
@@ -309,15 +308,15 @@
           totalComments++;
           refreshKey++;
         }
-        showToast($_('toasts.add-success'));
+        showSuccessToast($_('toasts.add-success'));
       }
 
       if (res.error === 'RATE_LIMITED') {
-        showToast($_('toasts.rate-limited'));
+        showErrorToast($_('toasts.rate-limited'));
       }
     } catch (e) {
       console.error('Failed to add comment', e);
-      showToast($_('toasts.add-error'));
+      showErrorToast($_('toasts.add-error'));
     }
   };
 

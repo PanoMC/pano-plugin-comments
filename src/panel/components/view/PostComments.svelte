@@ -104,7 +104,7 @@
     show as showDeleteCommentModal,
     setCallback as setDeleteCommentModalCallback,
   } from '../modals/ConfirmDeleteCommentModal.svelte';
-  import { showToast } from '@panomc/sdk/toasts';
+  import { showSuccessToast, showErrorToast } from '../../../main.js';
 
   export let data;
 
@@ -137,7 +137,7 @@
         path: `/api/panel/comment/settings/${postId}`,
         body: { enabled: commentsEnabled },
       });
-      showToast(
+      showSuccessToast(
         commentsEnabled
           ? $_('settings.comments-enabled-success')
           : $_('settings.comments-disabled-success'),
@@ -145,7 +145,7 @@
     } catch (e) {
       console.error(e);
       commentsEnabled = oldState;
-      showToast($_('components.toasts.settings-save-error'), 'error');
+      showErrorToast($_('components.toasts.settings-save-error'));
     }
   };
 

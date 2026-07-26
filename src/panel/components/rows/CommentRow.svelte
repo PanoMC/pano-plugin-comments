@@ -334,11 +334,10 @@
 {/if}
 
 <script>
-  import { _, pano } from '../../../main.js';
+  import { _, pano, showSuccessToast } from '../../../main.js';
   import { Date } from '@panomc/sdk/components/panel';
   import { base, page } from '@panomc/sdk/svelte';
   import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
-  import { showToast } from '@panomc/sdk/toasts';
   import { copy } from '@panomc/sdk/utils/text';
   import tooltip from '@panomc/sdk/utils/tooltip';
 
@@ -368,7 +367,7 @@
     const url = new URL(window.location.origin + base + '/posts/comments');
     url.searchParams.set('commentId', id.toString());
     copy(url.toString());
-    showToast($_('toasts.copy-success'));
+    showSuccessToast($_('toasts.copy-success'));
   }
 
   async function fetchReplies() {

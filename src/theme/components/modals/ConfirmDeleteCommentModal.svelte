@@ -57,9 +57,8 @@
 </script>
 
 <script>
-  import { _ } from '../../../main.js';
+  import { _, showSuccessToast } from '../../../main.js';
   import ApiUtil from '@panomc/sdk/utils/api';
-  import { showToast } from '@panomc/sdk/toasts';
 
   let loading = false;
 
@@ -73,7 +72,7 @@
       if (!res.error) {
         callback(id);
         hide();
-        showToast($_('toasts.delete-success'));
+        showSuccessToast($_('toasts.delete-success'));
       }
     } catch (e) {
       console.error('Failed to delete comment', e);
