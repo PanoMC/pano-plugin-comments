@@ -4,7 +4,6 @@ import com.panomc.platform.api.PanoPlugin
 import com.panomc.platform.api.config.PluginConfigManager
 import com.panomc.platform.setup.SetupManager
 import com.panomc.plugins.comments.config.CommentsConfig
-import com.panomc.plugins.license.PluginLicenseClient
 
 class CommentsPlugin : PanoPlugin() {
     private val pluginDatabaseManager by lazy {
@@ -15,26 +14,12 @@ class CommentsPlugin : PanoPlugin() {
         applicationContext.getBean(SetupManager::class.java)
     }
 
-    /**
-     * Premium plugin: enforce a panomc.com license at startup. No-op for free builds.
-     */
-    private val licenseClient by lazy { PluginLicenseClient(this) }
-
     private var isInitialized = false
 
     override suspend fun onStart() {
-        // Verify license BEFORE doing any startup work. If invalid, throws and the
-        // host marks this plugin failed and records the failure for the panel UI.
-        // Pano core itself keeps running so the operator can resolve the issue.
-        licenseClient.requireValidLicense()
-
         logger.info("Starting...")
 
         startPlugin()
-    }
-
-    override suspend fun verifyLicense() {
-        licenseClient.requireValidLicense()
     }
 
     internal suspend fun startPlugin() {
