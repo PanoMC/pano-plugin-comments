@@ -60,9 +60,8 @@
     <div class={hideHeader ? 'px-3 py-2 border-top' : 'card-footer'}>
       <Pagination
         {page}
-        {totalPage}
         on:firstPageClick={() => onPageClick(1)}
-        on:lastPageClick={() => onPageClick(totalPage)}
+        on:lastPageClick={() => onPageClick(page.totalPages)}
         on:pageLinkClick={(event) => onPageClick(event.detail.page)} />
     </div>
   {/if}
@@ -75,8 +74,8 @@
 
   export let comments = [];
   export let commentCount = 0;
-  export let page = 1;
-  export let totalPage = 1;
+  // the `page` object of the list answer: { number, size, totalItems, totalPages }
+  export let page = { number: 1, size: 10, totalItems: 0, totalPages: 0 };
   export let onDelete;
   export let onPageClick;
   export let highlightedComment = null;

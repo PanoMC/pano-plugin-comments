@@ -8,14 +8,29 @@ import com.panomc.plugins.comments.config.CommentsConfig
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
 
 @Endpoint
 class GetConfigAPI(
     private val plugin: CommentsPlugin
 ) : Api() {
-    override val paths = listOf(Path("/api/comment/config", RouteType.GET))
+    override val paths = listOf(Path("/comment/config", RouteType.GET))
+
+    override val doc = EndpointDoc(
+        summary = "The comment settings the site needs: replies, likes, paging type and who may write.",
+        tag = "comments",
+        response = objectSchema()
+            .requiredProperty("repliesEnabled", booleanSchema())
+            .requiredProperty("likesEnabled", booleanSchema())
+            .requiredProperty("paginationType", stringSchema())
+            .requiredProperty("commentPermission", stringSchema())
+            .requiredProperty("replyPermission", stringSchema())
+            .requiredProperty("cooldown", intSchema())
+            .requiredProperty("inputStyle", stringSchema())
+    )
 
     private val configManager by lazy {
         plugin.pluginBeanContext.getBean(PluginConfigManager::class.java) as PluginConfigManager<CommentsConfig>

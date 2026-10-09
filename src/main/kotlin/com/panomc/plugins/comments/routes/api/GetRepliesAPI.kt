@@ -10,11 +10,14 @@ import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.CommentLikeDao
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.optionalParam
-import io.vertx.ext.web.validation.builder.Parameters.param
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.optionalParam
+import com.panomc.platform.schema.dsl.Parameters.param
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
+import com.panomc.plugins.comments.util.CommentSchemas
 
 @Endpoint
 class GetRepliesAPI(
@@ -22,7 +25,14 @@ class GetRepliesAPI(
     private val commentDao: CommentDao,
     private val commentLikeDao: CommentLikeDao
 ) : Api() {
-    override val paths = listOf(Path("/api/comments/replies/:commentId", RouteType.GET))
+    override val paths = listOf(Path("/comments/replies/:commentId", RouteType.GET))
+
+    override val doc = EndpointDoc(
+        summary = "The next replies of a comment, three at a time; lastId is the id of the last reply already shown.",
+        tag = "comments",
+        response = objectSchema()
+            .requiredProperty("items", arraySchema().items(CommentSchemas.comment(withReplies = false)))
+    )
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)
@@ -86,7 +96,7 @@ class GetRepliesAPI(
 
         return Successful(
             mapOf(
-                "replies" to resultReplies
+                "items" to resultReplies
             )
         )
     }

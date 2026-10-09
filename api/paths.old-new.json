@@ -1,0 +1,122 @@
+[
+  {
+    "method": "GET",
+    "old": "/api/comment/config",
+    "new": "/api/plugins/pano-plugin-comments/comment/config",
+    "relative": "/plugins/pano-plugin-comments/comment/config",
+    "class": "GetConfigAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/comments/routes/api/GetConfigAPI.kt"
+  },
+  {
+    "method": "POST",
+    "old": "/api/comments",
+    "new": "/api/plugins/pano-plugin-comments/comments",
+    "relative": "/plugins/pano-plugin-comments/comments",
+    "class": "AddCommentAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/api/AddCommentAPI.kt"
+  },
+  {
+    "method": "DELETE",
+    "old": "/api/comments/:id",
+    "new": "/api/plugins/pano-plugin-comments/comments/:id",
+    "relative": "/plugins/pano-plugin-comments/comments/:id",
+    "class": "DeleteCommentAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/api/DeleteCommentAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/comments/:postId",
+    "new": "/api/plugins/pano-plugin-comments/comments/:postId",
+    "relative": "/plugins/pano-plugin-comments/comments/:postId",
+    "class": "GetCommentsAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/api/GetCommentsAPI.kt"
+  },
+  {
+    "method": "POST",
+    "old": "/api/comments/like/toggle",
+    "new": "/api/plugins/pano-plugin-comments/comments/like/toggle",
+    "relative": "/plugins/pano-plugin-comments/comments/like/toggle",
+    "class": "ToggleLikeAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/api/ToggleLikeAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/comments/replies/:commentId",
+    "new": "/api/plugins/pano-plugin-comments/comments/replies/:commentId",
+    "relative": "/plugins/pano-plugin-comments/comments/replies/:commentId",
+    "class": "GetRepliesAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/api/GetRepliesAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/comment/config",
+    "new": "/api/plugins/pano-plugin-comments/panel/comment/config",
+    "relative": "/plugins/pano-plugin-comments/panel/comment/config",
+    "class": "PanelGetConfigAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/comments/routes/panel/PanelGetConfigAPI.kt"
+  },
+  {
+    "method": "PUT",
+    "old": "/api/panel/comment/config",
+    "new": "/api/plugins/pano-plugin-comments/panel/comment/config",
+    "relative": "/plugins/pano-plugin-comments/panel/comment/config",
+    "class": "PanelUpdateConfigAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/comments/routes/panel/PanelUpdateConfigAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/comment/post-counts",
+    "new": "/api/plugins/pano-plugin-comments/panel/comment/post-counts",
+    "relative": "/plugins/pano-plugin-comments/panel/comment/post-counts",
+    "class": "PanelGetPostCommentCountsAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/panel/PanelGetPostCommentCountsAPI.kt"
+  },
+  {
+    "method": "PUT",
+    "old": "/api/panel/comment/settings/:postId",
+    "new": "/api/plugins/pano-plugin-comments/panel/comment/settings/:postId",
+    "relative": "/plugins/pano-plugin-comments/panel/comment/settings/:postId",
+    "class": "PanelUpdatePostSettingsAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/comments/routes/panel/PanelUpdatePostSettingsAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/comments",
+    "new": "/api/plugins/pano-plugin-comments/panel/comments",
+    "relative": "/plugins/pano-plugin-comments/panel/comments",
+    "class": "PanelGetAllCommentsAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/panel/PanelGetAllCommentsAPI.kt"
+  },
+  {
+    "method": "DELETE",
+    "old": "/api/panel/comments/:id",
+    "new": "/api/plugins/pano-plugin-comments/panel/comments/:id",
+    "relative": "/plugins/pano-plugin-comments/panel/comments/:id",
+    "class": "PanelDeleteCommentAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/panel/PanelDeleteCommentAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/comments/:id/replies",
+    "new": "/api/plugins/pano-plugin-comments/panel/comments/:id/replies",
+    "relative": "/plugins/pano-plugin-comments/panel/comments/:id/replies",
+    "class": "PanelGetRepliesAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/panel/PanelGetRepliesAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/comments/:postId",
+    "new": "/api/plugins/pano-plugin-comments/panel/comments/:postId",
+    "relative": "/plugins/pano-plugin-comments/panel/comments/:postId",
+    "class": "PanelGetCommentsAPI",
+    "file": "bin/main/com/panomc/plugins/comments/routes/panel/PanelGetCommentsAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/comments/player/:username",
+    "new": "/api/plugins/pano-plugin-comments/panel/comments/player/:username",
+    "relative": "/plugins/pano-plugin-comments/panel/comments/player/:username",
+    "class": "PanelGetPlayerCommentsAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/comments/routes/panel/PanelGetPlayerCommentsAPI.kt"
+  }
+]

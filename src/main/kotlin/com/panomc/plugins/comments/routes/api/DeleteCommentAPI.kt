@@ -11,10 +11,13 @@ import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.CommentLikeDao
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.param
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.param
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
+import com.panomc.platform.error.NotLoggedIn
 
 @Endpoint
 class DeleteCommentAPI(
@@ -22,7 +25,13 @@ class DeleteCommentAPI(
     private val commentDao: CommentDao,
     private val commentLikeDao: CommentLikeDao
 ) : LoggedInApi() {
-    override val paths = listOf(Path("/api/comments/:id", RouteType.DELETE))
+    override val paths = listOf(Path("/comments/:id", RouteType.DELETE))
+
+    override val doc = EndpointDoc(
+        summary = "Deletes the signed-in user's own comment with its replies and likes.",
+        tag = "comments",
+        errors = listOf(NotLoggedIn::class, NoPermission::class, NotFound::class)
+    )
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)

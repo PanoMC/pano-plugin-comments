@@ -7,13 +7,14 @@ import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.error.PageNotFound
 import com.panomc.platform.model.*
 import com.panomc.plugins.comments.CommentsPlugin
+import com.panomc.plugins.comments.util.PageInfo
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.permission.ManageCommentsPermission
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.optionalParam
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.optionalParam
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 import kotlin.math.ceil
@@ -23,7 +24,7 @@ class PanelGetAllCommentsAPI(
     private val plugin: CommentsPlugin,
     private val commentDao: CommentDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/comments", RouteType.GET))
+    override val paths = listOf(Path("/comments", RouteType.GET))
 
     private val databaseManager by lazy {
         plugin.applicationContext.getBean(DatabaseManager::class.java)
@@ -55,9 +56,9 @@ class PanelGetAllCommentsAPI(
         val comments = commentDao.getAllRoot(page, limit, sqlClient)
         val count = commentDao.countRoot(sqlClient)
 
-        val totalPageNum = if (count == 0L) 1L else ceil(count.toDouble() / limit).toLong()
+        val totalPages = if (count == 0L) 1L else ceil(count.toDouble() / limit).toLong()
 
-        if (totalPageNum in 1..<page) {
+        if (totalPages in 1..<page) {
             throw PageNotFound()
         }
 
@@ -143,9 +144,8 @@ class PanelGetAllCommentsAPI(
 
         return Successful(
             mapOf(
-                "comments" to resultComments,
-                "totalPage" to totalPageNum,
-                "commentCount" to count,
+                "items" to resultComments,
+                "page" to PageInfo.of(page, limit.toInt(), count),
                 "highlightedComment" to highlightedComment
             )
         )

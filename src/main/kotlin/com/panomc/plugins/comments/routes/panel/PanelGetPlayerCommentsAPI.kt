@@ -7,11 +7,12 @@ import com.panomc.platform.model.*
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.model.Comment
 import com.panomc.plugins.comments.permission.ManageCommentsPermission
+import com.panomc.plugins.comments.util.PageInfo
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.optionalParam
-import io.vertx.ext.web.validation.builder.Parameters.param
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.optionalParam
+import com.panomc.platform.schema.dsl.Parameters.param
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 import io.vertx.json.schema.common.dsl.Schemas.stringSchema
@@ -22,7 +23,7 @@ class PanelGetPlayerCommentsAPI(
     private val plugin: com.panomc.plugins.comments.CommentsPlugin,
     private val commentDao: CommentDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/comments/player/:username", RouteType.GET))
+    override val paths = listOf(Path("/comments/player/:username", RouteType.GET))
 
     private val databaseManager by lazy {
         plugin.applicationContext.getBean(DatabaseManager::class.java)
@@ -49,9 +50,9 @@ class PanelGetPlayerCommentsAPI(
         val user = databaseManager.userDao.getByUsername(username, sqlClient) ?: throw PageNotFound()
 
         val commentCount = commentDao.countParticipatedRootByUserId(user.id, sqlClient)
-        val totalPage = ceil(commentCount.toDouble() / limit).toLong().coerceAtLeast(1L)
+        val totalPages = ceil(commentCount.toDouble() / limit).toLong().coerceAtLeast(1L)
 
-        if (page > totalPage && commentCount > 0) {
+        if (page > totalPages && commentCount > 0) {
             throw PageNotFound()
         }
 
@@ -59,9 +60,8 @@ class PanelGetPlayerCommentsAPI(
         if (rootComments.isEmpty()) {
             return Successful(
                 mapOf(
-                    "comments" to emptyList<Map<String, Any?>>(),
-                    "commentCount" to 0,
-                    "totalPage" to 1
+                    "items" to emptyList<Map<String, Any?>>(),
+                    "page" to PageInfo.of(page, limit.toInt(), 0L)
                 )
             )
         }
@@ -91,9 +91,8 @@ class PanelGetPlayerCommentsAPI(
 
         return Successful(
             mapOf(
-                "comments" to threads,
-                "commentCount" to commentCount,
-                "totalPage" to totalPage
+                "items" to threads,
+                "page" to PageInfo.of(page, limit.toInt(), commentCount)
             )
         )
     }

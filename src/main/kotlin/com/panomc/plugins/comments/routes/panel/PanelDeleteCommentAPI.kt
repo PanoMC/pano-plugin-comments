@@ -9,8 +9,8 @@ import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.permission.ManageCommentsPermission
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.param
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.param
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 
@@ -19,7 +19,7 @@ class PanelDeleteCommentAPI(
     private val plugin: CommentsPlugin,
     private val commentDao: CommentDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/comments/:id", RouteType.DELETE))
+    override val paths = listOf(Path("/comments/:id", RouteType.DELETE))
 
     private val databaseManager by lazy {
         plugin.applicationContext.getBean(DatabaseManager::class.java)

@@ -7,7 +7,7 @@
       <div>
         {$_('pages.comments.table-title', {
           values: {
-            commentCount: totalComments || 0,
+            commentCount: pageInfo.totalItems,
           },
         })}
       </div>
@@ -29,9 +29,8 @@
       {#key refreshKey}
         <CommentTable
           {comments}
-          commentCount={totalComments}
-          page={currentPage}
-          {totalPage}
+          commentCount={pageInfo.totalItems}
+          page={pageInfo}
           onDelete={deleteComment}
           {onPageClick}
           hideHeader={true} />
@@ -43,7 +42,8 @@
 <ConfirmDeleteCommentModal />
 
 <script context="module">
-  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+  import {buildQueryParams} from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
   import {_} from '../../../main.js';
 
   export async function load(event) {
@@ -58,9 +58,7 @@
       return {
         data: {
           comments: [],
-          totalPage: 1,
-          totalComments: 0,
-          currentPage: 1,
+          page: { number: 1, size: 10, totalItems: 0, totalPages: 0 },
           commentsEnabled: true,
         },
       };
@@ -68,16 +66,14 @@
 
     try {
       const queryParams = buildQueryParams({ commentsPage: page });
-      const res = await ApiUtil.get({
-        path: `/api/panel/comments/${postId}${queryParams}`,
+      const res = await api.panel.get({
+        path: `/comments/${postId}${queryParams}`,
         request: event,
       });
       return {
         data: {
-          comments: res.comments || [],
-          totalPage: res.totalPage || 1,
-          totalComments: res.totalComments || 0,
-          currentPage: parseInt(page),
+          comments: res.items || [],
+          page: res.page,
           commentsEnabled: res.commentsEnabled !== false,
         },
       };
@@ -86,9 +82,7 @@
       return {
         data: {
           comments: [],
-          totalPage: 1,
-          totalComments: 0,
-          currentPage: 1,
+          page: { number: 1, size: 10, totalItems: 0, totalPages: 0 },
           commentsEnabled: true,
         },
       };
@@ -110,9 +104,7 @@
 
   let comments = data.comments || [];
   let commentsEnabled = data.commentsEnabled !== false;
-  let totalPage = data.totalPage || 1;
-  let totalComments = data.totalComments || 0;
-  let currentPage = data.currentPage || 1;
+  let pageInfo = data.page || { number: 1, size: 10, totalItems: 0, totalPages: 0 };
   let refreshKey = 0; // To force sub-component refresh if needed
 
   $: postId = $page.params.postId || $page.params.id;
@@ -122,9 +114,7 @@
   $: if (postId !== lastPostId) {
     lastPostId = postId;
     comments = data.comments || [];
-    totalPage = data.totalPage || 1;
-    totalComments = data.totalComments || 0;
-    currentPage = data.currentPage || 1;
+    pageInfo = data.page || { number: 1, size: 10, totalItems: 0, totalPages: 0 };
     commentsEnabled = data.commentsEnabled !== false;
     refreshKey++;
   }
@@ -133,8 +123,8 @@
     const oldState = commentsEnabled;
     commentsEnabled = !commentsEnabled;
     try {
-      await ApiUtil.put({
-        path: `/api/panel/comment/settings/${postId}`,
+      await api.panel.put({
+        path: `/comment/settings/${postId}`,
         body: { enabled: commentsEnabled },
       });
       showSuccessToast(
@@ -173,7 +163,7 @@
       const oldCount = comments.length;
       comments = comments.filter((c) => c.id != id);
       if (comments.length < oldCount) {
-        totalComments--;
+        pageInfo = { ...pageInfo, totalItems: Math.max(0, pageInfo.totalItems - 1) };
       }
     }
   });
@@ -184,15 +174,13 @@
       params.commentsPage = pageNum;
       const queryParams = buildQueryParams(params);
 
-      const res = await ApiUtil.get({
-        path: `/api/panel/comments/${postId}${queryParams}`,
+      const res = await api.panel.get({
+        path: `/comments/${postId}${queryParams}`,
       });
 
       // Update local state directly for smoothness
-      comments = res.comments || [];
-      totalPage = res.totalPage || 1;
-      totalComments = res.totalComments || 0;
-      currentPage = pageNum;
+      comments = res.items || [];
+      pageInfo = res.page;
       refreshKey++; // Force CommentTable area to see new page
 
       // Sync URL without full SvelteKit reload

@@ -1,8 +1,7 @@
 <CommentTable
   {comments}
-  commentCount={data.commentCount}
+  commentCount={data.page.totalItems}
   page={data.page}
-  totalPage={data.totalPage}
   onDelete={deleteComment}
   {onPageClick}
   {highlightedComment} />
@@ -10,7 +9,8 @@
 <ConfirmDeleteCommentModal />
 
 <script context="module">
-    import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+    import {buildQueryParams} from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
     export async function load(event) {
     const {
@@ -28,17 +28,17 @@
       params.page = parseInt(params.page || '1');
 
       const queryParams = buildQueryParams(params);
-      const res = await ApiUtil.get({
-        path: `/api/panel/comments${queryParams}`,
+      const res = await api.panel.get({
+        path: `/comments${queryParams}`,
         request: event,
       });
-      return { data: { ...res, page: params.page } };
+      return { data: { ...res, comments: res.items || [] } };
     } catch (e) {
       console.error('Failed to load comments', e);
     }
 
     return {
-      data: { comments: [], totalPage: 1, commentCount: 0, page: 1 },
+      data: { comments: [], page: { number: 1, size: 10, totalItems: 0, totalPages: 0 } },
     };
   }
 </script>
@@ -92,7 +92,7 @@
         data = {
           ...data,
           comments: updatedComments,
-          commentCount: (data.commentCount || 1) - 1,
+          page: { ...data.page, totalItems: Math.max(0, data.page.totalItems - 1) },
         };
       }
     }

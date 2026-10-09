@@ -2,9 +2,8 @@
   {#key refreshKey}
     <CommentTable
       {comments}
-      commentCount={totalComments}
-      page={currentPage}
-      {totalPage}
+      commentCount={pageInfo.totalItems}
+      page={pageInfo}
       onDelete={deleteComment}
       {onPageClick} />
   {/key}
@@ -13,7 +12,8 @@
 <ConfirmDeleteCommentModal />
 
 <script context="module">
-  import ApiUtil, {buildQueryParams} from '@panomc/sdk/utils/api';
+  import {buildQueryParams} from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export async function load(event) {
     const {
@@ -27,25 +27,21 @@
       return {
         data: {
           comments: [],
-          totalPage: 1,
-          totalComments: 0,
-          currentPage: 1,
+          page: { number: 1, size: 10, totalItems: 0, totalPages: 0 },
         },
       };
     }
 
     try {
       const queryParams = buildQueryParams({ page });
-      const res = await ApiUtil.get({
-        path: `/api/panel/comments/player/${username}${queryParams}`,
+      const res = await api.panel.get({
+        path: `/comments/player/${username}${queryParams}`,
         request: event,
       });
       return {
         data: {
-          comments: res.comments || [],
-          totalPage: res.totalPage || 1,
-          totalComments: res.commentCount || 0,
-          currentPage: parseInt(page),
+          comments: res.items || [],
+          page: res.page,
         },
       };
     } catch (e) {
@@ -53,9 +49,7 @@
       return {
         data: {
           comments: [],
-          totalPage: 1,
-          totalComments: 0,
-          currentPage: 1,
+          page: { number: 1, size: 10, totalItems: 0, totalPages: 0 },
         },
       };
     }
@@ -76,17 +70,13 @@
   $: username = $page.params.username;
 
   let comments = [];
-  let totalPage = 1;
-  let totalComments = 0;
-  let currentPage = 1;
+  let pageInfo = { number: 1, size: 10, totalItems: 0, totalPages: 0 };
 
   let lastUsername;
   $: if (username !== lastUsername) {
     lastUsername = username;
     comments = data?.comments ?? [];
-    totalPage = data?.totalPage ?? 1;
-    totalComments = data?.totalComments ?? 0;
-    currentPage = data?.currentPage ?? 1;
+    pageInfo = data?.page ?? { number: 1, size: 10, totalItems: 0, totalPages: 0 };
     refreshKey++;
   }
 
@@ -117,7 +107,7 @@
       const filtered = comments.filter((c) => c.id != id);
       if (filtered.length < oldCount) {
         comments = filtered;
-        totalComments = Math.max(0, totalComments - 1);
+        pageInfo = { ...pageInfo, totalItems: Math.max(0, pageInfo.totalItems - 1) };
       }
     }
   });
@@ -128,14 +118,12 @@
       params.page = pageNum;
       const queryParams = buildQueryParams(params);
 
-      const res = await ApiUtil.get({
-        path: `/api/panel/comments/player/${username}${queryParams}`,
+      const res = await api.panel.get({
+        path: `/comments/player/${username}${queryParams}`,
       });
 
-      comments = res.comments || [];
-      totalPage = res.totalPage || 1;
-      totalComments = res.commentCount || 0;
-      currentPage = pageNum;
+      comments = res.items || [];
+      pageInfo = res.page;
       refreshKey++;
 
       const url = new URL(window.location.href);

@@ -6,16 +6,20 @@ import com.panomc.platform.auth.PermissionManager
 import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.model.*
 import com.panomc.plugins.comments.CommentsPlugin
+import com.panomc.plugins.comments.util.PageInfo
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.CommentLikeDao
 import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.optionalParam
-import io.vertx.ext.web.validation.builder.Parameters.param
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.optionalParam
+import com.panomc.platform.schema.dsl.Parameters.param
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
+import com.panomc.plugins.comments.util.CommentSchemas
 
 @Endpoint
 class GetCommentsAPI(
@@ -24,7 +28,16 @@ class GetCommentsAPI(
     private val commentLikeDao: CommentLikeDao,
     private val postCommentSettingsDao: PostCommentSettingsDao
 ) : Api() {
-    override val paths = listOf(Path("/api/comments/:postId", RouteType.GET))
+    override val paths = listOf(Path("/comments/:postId", RouteType.GET))
+
+    override val doc = EndpointDoc(
+        summary = "The top-level comments of a post, ten per page, each with its first replies.",
+        tag = "comments",
+        response = objectSchema()
+            .requiredProperty("items", arraySchema().items(CommentSchemas.comment(withReplies = true)))
+            .requiredProperty("page", CommentSchemas.page())
+            .requiredProperty("commentsEnabled", booleanSchema())
+    )
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)
@@ -52,7 +65,6 @@ class GetCommentsAPI(
         val loggedIn = authProvider.isLoggedIn(context)
         val sqlClient = databaseManager.getSqlClient()
         val totalComments = commentDao.countRootByPostId(postId, sqlClient)
-        val totalPage = if (totalComments == 0L) 1L else Math.ceil(totalComments.toDouble() / limit).toLong()
         val comments = commentDao.getRootByPostId(postId, page, limit, sqlClient)
         val replyCounts = commentDao.getReplyCounts(comments.map { it.id }, sqlClient)
 
@@ -119,9 +131,8 @@ class GetCommentsAPI(
 
         return Successful(
             mapOf(
-                "comments" to resultComments,
-                "totalPage" to totalPage,
-                "totalComments" to totalComments,
+                "items" to resultComments,
+                "page" to PageInfo.of(page, limit.toInt(), totalComments),
                 "commentsEnabled" to (settings?.enabled ?: true)
             )
         )

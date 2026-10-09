@@ -30,7 +30,7 @@
 
 <script context="module">
     import {get, writable} from 'svelte/store';
-    import ApiUtil from '@panomc/sdk/utils/api';
+    import { api } from '@panomc/sdk/plugin-api';
 
     const modalElement = writable();
   const commentId = writable(null);
@@ -66,8 +66,8 @@
     loading = true;
 
     try {
-      const res = await ApiUtil.delete({
-        path: `/api/panel/comments/${get(commentId)}`,
+      const res = await api.panel.delete({
+        path: `/comments/${get(commentId)}`,
       });
       if (res.error) {
         console.error('Failed to delete comment', res.error);

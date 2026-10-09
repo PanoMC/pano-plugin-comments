@@ -179,7 +179,7 @@
 
 <script>
   import { _, showSuccessToast, showErrorToast } from '../../../main.js';
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export let addon;
 
@@ -203,8 +203,8 @@
     if (saving) return;
     saving = true;
     try {
-      await ApiUtil.put({
-        path: '/api/panel/comment/config',
+      await api.panel.put({
+        path: '/comment/config',
         body: config,
       });
       addon.config = config; // Update local state for consistency

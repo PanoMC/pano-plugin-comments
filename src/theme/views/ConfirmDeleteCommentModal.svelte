@@ -1,23 +1,23 @@
 <!-- Confirm Delete Comment Modal -->
-<div aria-hidden="true" class="modal fade" bind:this={$modalElement} role="dialog" tabindex="-1">
+<div aria-hidden="true" class="comments-confirm-delete-comment-modal modal fade" bind:this={$modalElement} role="dialog" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered" role="dialog">
     <div class="modal-content">
-      <div class="modal-body text-center">
+      <div class="comments-confirm-delete-comment-modal__body modal-body text-center">
         <div class="pb-3">
           <i class="fas fa-question-circle fa-3x d-block m-auto text-gray"></i>
         </div>
         {$_('components.comments.modals.delete.description')}
       </div>
-      <div class="modal-footer flex-nowrap">
+      <div class="comments-confirm-delete-comment-modal__footer modal-footer flex-nowrap">
         <button
-          class="btn btn-link col-6 m-0 text-decoration-none"
+          class="comments-confirm-delete-comment-modal__action btn btn-link col-6 m-0 text-decoration-none"
           type="button"
           class:disabled={loading}
           on:click={hide}>
           {$_('components.comments.modals.delete.cancel')}
         </button>
         <button
-          class="btn btn-danger col-6 m-0"
+          class="comments-confirm-delete-comment-modal__confirm btn btn-danger col-6 m-0"
           type="button"
           class:disabled={loading}
           on:click={onYesClick}>
@@ -57,8 +57,17 @@
 </script>
 
 <script>
-  import { _, showSuccessToast } from '../../../main.js';
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { derived } from 'svelte/store';
+  import { _ as i18n } from '@panomc/sdk/utils/language';
+  import { showToast } from '@panomc/sdk/toasts';
+  import { api } from '@panomc/sdk/plugin-api';
+
+  // plugin translations: $_('key') reads plugins.pano-plugin-comments.key
+  const _ = derived(i18n, ($_fn) => (key, options) => $_fn(`plugins.pano-plugin-comments.${key}`, options));
+
+  // toasts coloured like the panel's: success / danger variants (an older host ignores the option and renders neutral)
+  const showSuccessToast = (text, params = {}) => showToast(text, params, undefined, { variant: 'success' });
+  const showErrorToast = (text, params = {}) => showToast(text, params, undefined, { variant: 'danger' });
 
   let loading = false;
 
@@ -66,8 +75,8 @@
     loading = true;
     const id = get(commentId);
     try {
-      const res = await ApiUtil.delete({
-        path: `/api/comments/${id}`,
+      const res = await api.delete({
+        path: `/comments/${id}`,
       });
       if (!res.error) {
         callback(id);

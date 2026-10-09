@@ -155,7 +155,7 @@
       href="{base}/players/detail/{comment.username}"
       class="d-flex align-items-center gap-2">
       <img
-        src="/api/profile/picture/{comment.username || 'char'}?{$avatarVersion}"
+        src="/api/v1/profile/picture/{comment.username || 'char'}?{$avatarVersion}"
         class="rounded-circle"
         width="32"
         height="32"
@@ -267,7 +267,7 @@
           href="{base}/players/detail/{reply.username}"
           class="d-flex align-items-center gap-2 text-decoration-none text-reset ms-3">
           <img
-            src="/api/profile/picture/{reply.username || 'char'}?{$avatarVersion}"
+            src="/api/v1/profile/picture/{reply.username || 'char'}?{$avatarVersion}"
             width="24"
             height="24"
             class="rounded-circle"
@@ -337,7 +337,8 @@
   import { _, pano, showSuccessToast } from '../../../main.js';
   import { Date } from '@panomc/sdk/components/panel';
   import { base, page } from '@panomc/sdk/svelte';
-  import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
   import { copy } from '@panomc/sdk/utils/text';
   import tooltip from '@panomc/sdk/utils/tooltip';
 
@@ -376,10 +377,10 @@
     try {
       const lastId = replies.at(-1)?.id;
       const queryParams = buildQueryParams({ lastId, limit: 10 });
-      const res = await ApiUtil.get({
-        path: `/api/panel/comments/${comment.id}/replies${queryParams}`,
+      const res = await api.panel.get({
+        path: `/comments/${comment.id}/replies${queryParams}`,
       });
-      const next = res.replies || [];
+      const next = res.items || [];
       comment.replies = [...replies, ...next];
       repliesHasMore = next.length === 10;
     } catch (e) {

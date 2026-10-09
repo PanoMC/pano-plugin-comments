@@ -15,11 +15,14 @@ import com.panomc.plugins.comments.db.model.CommentLike
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Bodies.json
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Bodies.json
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 import io.vertx.json.schema.common.dsl.Schemas.objectSchema
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
+import com.panomc.platform.error.NotLoggedIn
 
 @Endpoint
 class ToggleLikeAPI(
@@ -27,7 +30,16 @@ class ToggleLikeAPI(
     private val commentDao: CommentDao,
     private val commentLikeDao: CommentLikeDao
 ) : LoggedInApi() {
-    override val paths = listOf(Path("/api/comments/like/toggle", RouteType.POST))
+    override val paths = listOf(Path("/comments/like/toggle", RouteType.POST))
+
+    override val doc = EndpointDoc(
+        summary = "Likes a comment, or takes the like back.",
+        tag = "comments",
+        response = objectSchema()
+            .requiredProperty("likes", intSchema())
+            .requiredProperty("isLiked", booleanSchema()),
+        errors = listOf(BadRequest::class, NotLoggedIn::class, NotFound::class)
+    )
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)

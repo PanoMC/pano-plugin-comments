@@ -6,15 +6,16 @@ import com.panomc.platform.auth.PermissionManager
 import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.model.*
 import com.panomc.plugins.comments.CommentsPlugin
+import com.panomc.plugins.comments.util.PageInfo
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import com.panomc.plugins.comments.permission.ManageCommentsPermission
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters.optionalParam
-import io.vertx.ext.web.validation.builder.Parameters.param
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters.optionalParam
+import com.panomc.platform.schema.dsl.Parameters.param
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.numberSchema
 
@@ -24,7 +25,7 @@ class PanelGetCommentsAPI(
     private val commentDao: CommentDao,
     private val postCommentSettingsDao: PostCommentSettingsDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/comments/:postId", RouteType.GET))
+    override val paths = listOf(Path("/comments/:postId", RouteType.GET))
 
     private val databaseManager by lazy {
         plugin.applicationContext.getBean(DatabaseManager::class.java)
@@ -53,7 +54,6 @@ class PanelGetCommentsAPI(
 
         val sqlClient = databaseManager.getSqlClient()
         val totalComments = commentDao.countRootByPostId(postId, sqlClient)
-        val totalPages = if (totalComments == 0L) 1L else Math.ceil(totalComments.toDouble() / limit).toLong()
         val comments = commentDao.getRootByPostId(postId, page, limit, sqlClient)
         val replyCounts = commentDao.getReplyCounts(comments.map { it.id }, sqlClient)
 
@@ -76,9 +76,8 @@ class PanelGetCommentsAPI(
 
         return Successful(
             mapOf(
-                "comments" to resultComments,
-                "totalPage" to totalPages,
-                "totalComments" to totalComments,
+                "items" to resultComments,
+                "page" to PageInfo.of(page, limit.toInt(), totalComments),
                 "commentsEnabled" to (postCommentSettingsDao.get(postId, sqlClient)?.enabled ?: true)
             )
         )

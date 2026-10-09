@@ -1,18 +1,18 @@
 <style>
-  .pano-comments-container {
+  .comments-theme-post-comments {
     width: 100%;
   }
 
   @media (min-width: 992px) {
-    .pano-comments-container {
+    .comments-theme-post-comments {
       width: 50%;
     }
   }
 </style>
 
-<div class="vstack gap-3 pano-comments-container mx-auto pt-5" id="pano-comments-section">
+<div class="vstack gap-3 comments-theme-post-comments mx-auto pt-5" id="pano-comments-section">
   <div class="text-center">
-    <h4 class="mb-0">
+    <h4 class="comments-theme-post-comments__title mb-0">
       {totalComments > 0
         ? $_('components.comments.count', {
             values: { count: totalComments },
@@ -23,7 +23,7 @@
 
   <!-- New Comment Trigger -->
   {#if !commentsEnabled}
-    <div class="alert alert-secondary text-center">
+    <div class="comments-theme-post-comments__alert alert alert-secondary text-center">
       {$_('components.comments.closed')}
     </div>
   {:else if session?.user}
@@ -31,14 +31,14 @@
       {#if inputStyle === 'INLINE'}
         <div class="mb-4">
           <textarea
-            class="form-control mb-2"
+            class="comments-theme-post-comments__input form-control mb-2"
             rows="3"
             autocomplete="off"
             placeholder={$_('components.comments.placeholder')}
             bind:value={newCommentContent}></textarea>
           <div class="d-flex justify-content-end">
             <button
-              class="btn btn-primary"
+              class="comments-theme-post-comments__action btn btn-primary"
               on:click={() => {
                 addComment(null, newCommentContent);
                 newCommentContent = '';
@@ -50,31 +50,31 @@
         </div>
       {:else}
         <div class="d-flex justify-content-center">
-          <button class="btn btn-primary text-decoration-none" on:click={showAddModal}>
+          <button class="comments-theme-post-comments__add-comment btn btn-primary text-decoration-none" on:click={showAddModal}>
             <i class="fas fa-plus me-2"></i>
             {$_('components.comments.add-comment')}
           </button>
         </div>
       {/if}
     {:else}
-      <div class="alert alert-warning text-center">
+      <div class="comments-theme-post-comments__no-permission alert alert-warning text-center">
         {$_('components.comments.no-permission')}
       </div>
     {/if}
   {:else}
-    <div class="alert alert-info text-center">
+    <div class="comments-theme-post-comments__login-required alert alert-info text-center">
       {$_('components.comments.login-required')}
     </div>
   {/if}
 
   <!-- Comments Area with Local Re-creation -->
   {#key refreshKey}
-    <div class="list-group">
+    <div class="comments-theme-post-comments__list list-group">
       {#if comments.length === 0}
         <NoContent text={$_('components.comments.no-comments')} />
       {:else}
         {#each comments as comment (comment.id)}
-          <div class="list-group-item">
+          <div class="comments-theme-post-comments__item list-group-item">
             <ThemeCommentItem
               {comment}
               {session}
@@ -95,9 +95,9 @@
     <!-- Pagination or Load More -->
     {#if totalComments > 0}
       {#if isLoadMore}
-        {#if currentPage < totalPage}
+        {#if currentPage < pageInfo.totalPages}
           <div class="d-flex justify-content-center mt-3">
-            <button class="btn btn-primary" on:click={loadMore} disabled={loadingMore}>
+            <button class="comments-theme-post-comments__load-more btn btn-primary" on:click={loadMore} disabled={loadingMore}>
               {#if loadingMore}
                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
                 ></span>
@@ -109,10 +109,9 @@
       {:else}
         <div class="d-flex justify-content-center">
           <Pagination
-            page={currentPage}
-            {totalPage}
+            page={pageInfo}
             on:firstPageClick={() => onPageClick(1)}
-            on:lastPageClick={() => onPageClick(totalPage)}
+            on:lastPageClick={() => onPageClick(pageInfo.totalPages)}
             on:pageLinkClick={(event) => onPageClick(event.detail.page)} />
         </div>
       {/if}
@@ -123,22 +122,37 @@
 <ConfirmDeleteCommentModal />
 <AddCommentModal />
 
+<script context="module">
+  // The comments block under a post: mounts by itself on the post page, or a theme places it with
+  // <PluginBlock id="comments:ThemePostComments" post={post} />.
+  export const view = { hook: 'theme:post-detail:bottom', block: true };
+</script>
+
 <script>
   import { page } from '@panomc/sdk/svelte';
-  import { get } from 'svelte/store';
-  import { _, showSuccessToast, showErrorToast } from '../../../main.js';
+  import { derived, get } from 'svelte/store';
+  import { _ as i18n } from '@panomc/sdk/utils/language';
+  import { showToast } from '@panomc/sdk/toasts';
   import { NoContent, Pagination } from '@panomc/sdk/components/theme';
-  import ApiUtil, { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { buildQueryParams } from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
   import { hasPermission } from '@panomc/sdk/utils/auth';
   import ConfirmDeleteCommentModal, {
     setCallback as setDeleteCallback,
     show as showDeleteModal,
-  } from '../modals/ConfirmDeleteCommentModal.svelte';
+  } from './ConfirmDeleteCommentModal.svelte';
   import ThemeCommentItem from './ThemeCommentItem.svelte';
   import AddCommentModal, {
     setCallback as setAddCallback,
     show as showAddModal,
-  } from '../modals/AddCommentModal.svelte';
+  } from './AddCommentModal.svelte';
+
+  // plugin translations: $_('key') reads plugins.pano-plugin-comments.key
+  const _ = derived(i18n, ($_fn) => (key, options) => $_fn(`plugins.pano-plugin-comments.${key}`, options));
+
+  // toasts coloured like the panel's: success / danger variants (an older host ignores the option and renders neutral)
+  const showSuccessToast = (text, params = {}) => showToast(text, params, undefined, { variant: 'success' });
+  const showErrorToast = (text, params = {}) => showToast(text, params, undefined, { variant: 'danger' });
 
   // Props
   export let post;
@@ -162,7 +176,12 @@
   $: canComment = hasPermission(commentPermission);
   $: canReply = hasPermission(replyPermission);
 
-  $: totalPage = Math.ceil((totalComments || 0) / 10) || 1;
+  $: pageInfo = {
+    number: currentPage,
+    size: 10,
+    totalItems: totalComments || 0,
+    totalPages: Math.ceil((totalComments || 0) / 10) || 1,
+  };
   let refreshKey = 0; // To force sub-component refresh if needed
   let loadingMore = false;
 
@@ -221,13 +240,13 @@
       params.page = pageNum;
       const queryParams = buildQueryParams(params);
 
-      const res = await ApiUtil.get({
-        path: `/api/comments/${post.id}${queryParams}`,
+      const res = await api.get({
+        path: `/comments/${post.id}${queryParams}`,
       });
 
       // Local update for smoothness
-      comments = res.comments || [];
-      totalComments = res.totalComments || 0;
+      comments = res.items || [];
+      totalComments = res.page?.totalItems || 0;
       currentPage = pageNum;
       refreshKey++; // Force refresh of the comments and pagination area
 
@@ -255,13 +274,13 @@
       params.page = nextPage;
       const queryParams = buildQueryParams(params);
 
-      const res = await ApiUtil.get({
-        path: `/api/comments/${post.id}${queryParams}`,
+      const res = await api.get({
+        path: `/comments/${post.id}${queryParams}`,
       });
 
-      const newComments = res.comments || [];
+      const newComments = res.items || [];
       comments = [...comments, ...newComments];
-      totalComments = res.totalComments || 0;
+      totalComments = res.page?.totalItems || 0;
       currentPage = nextPage;
 
       // Update URL without refresh
@@ -285,8 +304,8 @@
       const body = { postId: post.id, content: text };
       if (parentId) body.parentId = parentId;
 
-      const res = await ApiUtil.post({
-        path: '/api/comments',
+      const res = await api.post({
+        path: '/comments',
         body,
       });
 
@@ -311,7 +330,7 @@
         showSuccessToast($_('toasts.add-success'));
       }
 
-      if (res.error === 'RATE_LIMITED') {
+      if (res.error?.code === 'RATE_LIMITED') {
         showErrorToast($_('toasts.rate-limited'));
       }
     } catch (e) {
@@ -335,8 +354,8 @@
     comments = [...comments]; // Trigger update
 
     try {
-      const res = await ApiUtil.post({
-        path: '/api/comments/like/toggle',
+      const res = await api.post({
+        path: '/comments/like/toggle',
         body: { commentId: comment.id },
       });
       const data = res.data || res;
@@ -358,10 +377,10 @@
     try {
       const lastId = c.replies?.at(-1)?.id;
       const queryParams = buildQueryParams({ lastId });
-      const res = await ApiUtil.get({
-        path: `/api/comments/replies/${c.id}${queryParams}`,
+      const res = await api.get({
+        path: `/comments/replies/${c.id}${queryParams}`,
       });
-      const next = res.replies || [];
+      const next = res.items || [];
       c.replies = [...(c.replies || []), ...next];
       c.repliesHasMore = next.length === 3;
     } catch (e) {

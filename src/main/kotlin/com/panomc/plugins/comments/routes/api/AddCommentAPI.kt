@@ -19,10 +19,13 @@ import com.panomc.plugins.comments.db.model.Comment
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Bodies.json
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Bodies.json
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.*
+import com.panomc.platform.schema.EndpointDoc
+import com.panomc.platform.error.NotLoggedIn
+import com.panomc.plugins.comments.util.CommentSchemas
 
 @Endpoint
 class AddCommentAPI(
@@ -30,7 +33,15 @@ class AddCommentAPI(
     private val commentDao: CommentDao,
     private val postCommentSettingsDao: PostCommentSettingsDao
 ) : LoggedInApi() {
-    override val paths = listOf(Path("/api/comments", RouteType.POST))
+    override val paths = listOf(Path("/comments", RouteType.POST))
+
+    override val doc = EndpointDoc(
+        summary = "Writes a comment on a post, or a reply when parentId is given.",
+        tag = "comments",
+        response = objectSchema()
+            .requiredProperty("comment", CommentSchemas.comment(withReplies = false)),
+        errors = listOf(BadRequest::class, NotLoggedIn::class, NoPermission::class, NotFound::class, RateLimited::class)
+    )
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)

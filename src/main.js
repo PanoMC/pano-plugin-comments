@@ -1,8 +1,9 @@
 import { PanoPlugin, viewComponent } from '@panomc/sdk';
 import { derived } from 'svelte/store';
 import { _ as i18n } from '@panomc/sdk/utils/language';
-import ApiUtil from '@panomc/sdk/utils/api';
+import { api } from '@panomc/sdk/plugin-api';
 import { showToast } from '@panomc/sdk/toasts';
+import { setAvatarVersion } from './theme/host.js';
 
 const pluginId = 'pano-plugin-comments';
 
@@ -32,6 +33,8 @@ export let pano;
 export default class PanoPluginComments extends PanoPlugin {
   onLoad() {
     pano = this.pano;
+    // the theme views read the avatar cache-buster through theme/host.js (they cannot import this file)
+    setAvatarVersion(pano.ui?.avatar?.getVersion?.());
     const panoApi = this.pano;
 
     if (pano.isPanel) {
@@ -57,8 +60,8 @@ export default class PanoPluginComments extends PanoPlugin {
         if (postIds.length === 0) return;
 
         try {
-          const res = await ApiUtil.get({
-            path: `/api/panel/comment/post-counts?postIds=${postIds.join(',')}`,
+          const res = await api.panel.get({
+            path: `/comment/post-counts?postIds=${postIds.join(',')}`,
             request: event,
           });
           data.commentCounts = res.counts || {};
@@ -100,8 +103,8 @@ export default class PanoPluginComments extends PanoPlugin {
         if (data.addon.id !== 'pano-plugin-comments') return;
 
         try {
-          const config = await ApiUtil.get({
-            path: '/api/panel/comment/config',
+          const config = await api.panel.get({
+            path: '/comment/config',
             request: event,
           });
           data.addon.config = config;
@@ -127,26 +130,29 @@ export default class PanoPluginComments extends PanoPlugin {
 
         try {
           const [commentsRes, configRes] = await Promise.all([
-            ApiUtil.get({
-              path: `/api/comments/${data.post.id}?page=${page}`,
+            api.get({
+              path: `/comments/${data.post.id}?page=${page}`,
               request: event,
             }),
-            ApiUtil.get({
-              path: `/api/comment/config`,
+            api.get({
+              path: `/comment/config`,
               request: event,
             }),
           ]);
-          data.post.commentData = { ...commentsRes, page, config: configRes };
+          data.post.commentData = {
+            comments: commentsRes.items || [],
+            totalComments: commentsRes.page?.totalItems || 0,
+            commentsEnabled: commentsRes.commentsEnabled,
+            page,
+            config: configRes,
+          };
         } catch (e) {
           console.error('Failed to load comments or config', e);
           data.post.commentData = {};
         }
       });
 
-      pano.ui.hook.register({
-        name: 'theme:post-detail:bottom',
-        component: viewComponent(() => import('./theme/components/view/ThemePostComments.svelte')),
-      });
+      // the comments block under a post is the view comments:ThemePostComments (hook theme:post-detail:bottom, block: true)
     }
   }
 

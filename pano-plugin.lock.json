@@ -1,0 +1,117 @@
+{
+  "controllers": {},
+  "format": 1,
+  "views": {
+    "comments:AddCommentModal": {
+      "classes": [
+        "comments-add-comment-modal",
+        "comments-add-comment-modal__action",
+        "comments-add-comment-modal__body",
+        "comments-add-comment-modal__footer",
+        "comments-add-comment-modal__header",
+        "comments-add-comment-modal__image",
+        "comments-add-comment-modal__input",
+        "comments-add-comment-modal__title"
+      ],
+      "contract": 1,
+      "hooks": [],
+      "props": {},
+      "slots": []
+    },
+    "comments:ConfirmDeleteCommentModal": {
+      "classes": [
+        "comments-confirm-delete-comment-modal",
+        "comments-confirm-delete-comment-modal__action",
+        "comments-confirm-delete-comment-modal__body",
+        "comments-confirm-delete-comment-modal__confirm",
+        "comments-confirm-delete-comment-modal__footer"
+      ],
+      "contract": 1,
+      "hooks": [],
+      "props": {},
+      "slots": []
+    },
+    "comments:ThemeCommentItem": {
+      "classes": [
+        "comments-theme-comment-item",
+        "comments-theme-comment-item__action",
+        "comments-theme-comment-item__badge",
+        "comments-theme-comment-item__image",
+        "comments-theme-comment-item__input",
+        "comments-theme-comment-item__like",
+        "comments-theme-comment-item__load-more-replies",
+        "comments-theme-comment-item__replies",
+        "comments-theme-comment-item__reply",
+        "comments-theme-comment-item__reply-line",
+        "comments-theme-comment-item__send"
+      ],
+      "contract": 1,
+      "hooks": [],
+      "props": {
+        "addComment": {
+          "required": true
+        },
+        "canReply": {
+          "required": false
+        },
+        "comment": {
+          "required": true
+        },
+        "commentsEnabled": {
+          "required": false
+        },
+        "deleteComment": {
+          "required": true
+        },
+        "fetchReplies": {
+          "required": true
+        },
+        "isLast": {
+          "required": false
+        },
+        "isReply": {
+          "required": false
+        },
+        "likesEnabled": {
+          "required": false
+        },
+        "repliesEnabled": {
+          "required": false
+        },
+        "session": {
+          "required": true
+        },
+        "toggleLike": {
+          "required": true
+        },
+        "toggleReply": {
+          "required": true
+        }
+      },
+      "slots": []
+    },
+    "comments:ThemePostComments": {
+      "classes": [
+        "comments-theme-post-comments",
+        "comments-theme-post-comments__action",
+        "comments-theme-post-comments__add-comment",
+        "comments-theme-post-comments__alert",
+        "comments-theme-post-comments__input",
+        "comments-theme-post-comments__item",
+        "comments-theme-post-comments__list",
+        "comments-theme-post-comments__load-more",
+        "comments-theme-post-comments__login-required",
+        "comments-theme-post-comments__no-permission",
+        "comments-theme-post-comments__title"
+      ],
+      "contract": 1,
+      "hooks": [],
+      "props": {
+        "post": {
+          "required": true
+        }
+      },
+      "slots": []
+    }
+  }
+}

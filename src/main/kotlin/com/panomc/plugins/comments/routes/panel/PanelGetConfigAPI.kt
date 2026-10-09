@@ -10,14 +10,14 @@ import com.panomc.plugins.comments.permission.ManageCommentsPermission
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 
 @Endpoint
 class PanelGetConfigAPI(
     private val plugin: CommentsPlugin
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/comment/config", RouteType.GET))
+    override val paths = listOf(Path("/comment/config", RouteType.GET))
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)
