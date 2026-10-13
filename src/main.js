@@ -56,7 +56,9 @@ export default class PanoPluginComments extends PanoPlugin {
       });
 
       pano.ui.posts.onLoad(async (data, event) => {
-        const postIds = data.posts.map((p) => p.id).filter((id) => id > 0);
+        // The posts list answers `{ items }` (every list does since /api/v1); `posts` was its old name.
+        const posts = data.items ?? data.posts ?? [];
+        const postIds = posts.map((p) => p.id).filter((id) => id > 0);
         if (postIds.length === 0) return;
 
         try {
@@ -156,7 +158,7 @@ export default class PanoPluginComments extends PanoPlugin {
     }
   }
 
-  onContextUpdate(ctx) { }
+  onContextUpdate(ctx) {}
 
-  onUnload() { }
+  onUnload() {}
 }
