@@ -16,7 +16,10 @@ import com.panomc.plugins.comments.config.CommentsConfig
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.PostCommentSettingsDao
 import com.panomc.plugins.comments.db.model.Comment
+import io.vertx.core.Handler
 import io.vertx.ext.web.RoutingContext
+import io.vertx.ext.web.handler.BodyHandler
+import java.util.concurrent.ConcurrentHashMap
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
 import com.panomc.platform.schema.dsl.Bodies.json
@@ -59,6 +62,21 @@ class AddCommentAPI(
         plugin.applicationContext.getBean(DatabaseManager::class.java)
     }
 
+    companion object {
+        const val MAX_CONTENT_LENGTH = 5000
+
+        // A comment body is a few KB at most; anything bigger is refused before it is read.
+        private const val BODY_LIMIT = 64L * 1024
+
+        // Users with a request in progress, so parallel requests cannot slip past the cooldown together.
+        private val postingUsers = ConcurrentHashMap.newKeySet<Long>()
+    }
+
+    override fun bodyHandler(): Handler<RoutingContext> =
+        BodyHandler.create()
+            .setDeleteUploadedFilesOnEnd(true)
+            .setBodyLimit(BODY_LIMIT)
+
     override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
         ValidationHandlerBuilder.create(schemaRepository)
             .body(
@@ -76,6 +94,12 @@ class AddCommentAPI(
         val body = context.body().asJsonObject()
 
         val postId = body.getLong("postId")
+        val content = body.getString("content")?.trim()
+
+        if (content.isNullOrEmpty() || content.length > MAX_CONTENT_LENGTH) {
+            throw BadRequest()
+        }
+
         val sqlClient = databaseManager.getSqlClient()
 
         val post = databaseManager.postDao.getById(postId, sqlClient) ?: throw NotFound()
@@ -123,29 +147,42 @@ class AddCommentAPI(
             }
         }
 
-        if (configManager.config.cooldown > 0) {
-            val lastComment = if (parentId != null) {
-                commentDao.getLastReplyByUserId(userId, sqlClient)
-            } else {
-                commentDao.getLastRootCommentByUserId(userId, sqlClient)
-            }
-            if (lastComment != null) {
-                val diff = System.currentTimeMillis() - lastComment.createdAt
-                if (diff < configManager.config.cooldown * 1000L) {
-                    throw RateLimited()
-                }
-            }
+        val cooldown = configManager.config.cooldown
+
+        if (cooldown > 0 && !postingUsers.add(userId)) {
+            throw RateLimited()
         }
 
-        val comment = Comment(
-            postId = postId,
-            userId = userId,
-            content = body.getString("content"),
-            parentId = parentId
-        )
+        val comment = try {
+            if (cooldown > 0) {
+                val lastComment = if (parentId != null) {
+                    commentDao.getLastReplyByUserId(userId, sqlClient)
+                } else {
+                    commentDao.getLastRootCommentByUserId(userId, sqlClient)
+                }
+                if (lastComment != null) {
+                    val diff = System.currentTimeMillis() - lastComment.createdAt
+                    if (diff < cooldown * 1000L) {
+                        throw RateLimited()
+                    }
+                }
+            }
 
-        val id = commentDao.add(comment, sqlClient)
-        comment.id = id
+            val newComment = Comment(
+                postId = postId,
+                userId = userId,
+                content = content,
+                parentId = parentId
+            )
+
+            newComment.id = commentDao.add(newComment, sqlClient)
+
+            newComment
+        } finally {
+            if (cooldown > 0) {
+                postingUsers.remove(userId)
+            }
+        }
 
         return Successful(
             mapOf(

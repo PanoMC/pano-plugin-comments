@@ -8,7 +8,7 @@ class CommentsConfig(
     val paginationType: PaginationType = PaginationType.PAGINATION,
     val commentPermission: String = "",
     val replyPermission: String = "",
-    val cooldown: Int = 0,
+    val cooldown: Int = 5,
     val inputStyle: InputStyle = InputStyle.MODAL,
     version: Int = 1
 ) : PluginConfig(version)

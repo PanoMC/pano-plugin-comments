@@ -189,7 +189,7 @@
     paginationType: 'PAGINATION',
     commentPermission: '',
     replyPermission: '',
-    cooldown: 0,
+    cooldown: 5,
     inputStyle: 'MODAL',
   };
   let saving = false;
