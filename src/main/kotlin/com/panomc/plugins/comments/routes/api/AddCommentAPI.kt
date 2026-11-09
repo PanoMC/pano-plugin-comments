@@ -109,7 +109,8 @@ class AddCommentAPI(
             }
 
             val parentComment = commentDao.getById(parentId, sqlClient)
-            if (parentComment == null || parentComment.parentId != null) {
+            // A reply must stay on the post of its parent, so the checks above apply to the thread it lands in.
+            if (parentComment == null || parentComment.parentId != null || parentComment.postId != postId) {
                 return BadRequest()
             }
         } else {
