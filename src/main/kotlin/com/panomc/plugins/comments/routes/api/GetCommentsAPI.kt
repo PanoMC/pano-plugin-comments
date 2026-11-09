@@ -5,6 +5,8 @@ import com.panomc.platform.auth.AuthProvider
 import com.panomc.platform.auth.PermissionManager
 import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.model.*
+import com.panomc.platform.error.NotFound
+import com.panomc.platform.util.PostStatus
 import com.panomc.plugins.comments.CommentsPlugin
 import com.panomc.plugins.comments.util.PageInfo
 import com.panomc.plugins.comments.db.dao.CommentDao
@@ -36,7 +38,8 @@ class GetCommentsAPI(
         response = objectSchema()
             .requiredProperty("items", arraySchema().items(CommentSchemas.comment(withReplies = true)))
             .requiredProperty("page", CommentSchemas.page())
-            .requiredProperty("commentsEnabled", booleanSchema())
+            .requiredProperty("commentsEnabled", booleanSchema()),
+        errors = listOf(NotFound::class)
     )
 
     private val authProvider by lazy {
@@ -64,6 +67,13 @@ class GetCommentsAPI(
 
         val loggedIn = authProvider.isLoggedIn(context)
         val sqlClient = databaseManager.getSqlClient()
+
+        // Comments of a draft or trashed post stay hidden, like the post itself.
+        val post = databaseManager.postDao.getById(postId, sqlClient)
+        if (post == null || post.status != PostStatus.PUBLISHED) {
+            throw NotFound()
+        }
+
         val totalComments = commentDao.countRootByPostId(postId, sqlClient)
         val comments = commentDao.getRootByPostId(postId, page, limit, sqlClient)
         val replyCounts = commentDao.getReplyCounts(comments.map { it.id }, sqlClient)

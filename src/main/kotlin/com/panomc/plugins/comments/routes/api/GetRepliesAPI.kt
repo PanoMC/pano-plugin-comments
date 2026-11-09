@@ -5,6 +5,8 @@ import com.panomc.platform.auth.AuthProvider
 import com.panomc.platform.auth.PermissionManager
 import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.model.*
+import com.panomc.platform.error.NotFound
+import com.panomc.platform.util.PostStatus
 import com.panomc.plugins.comments.CommentsPlugin
 import com.panomc.plugins.comments.db.dao.CommentDao
 import com.panomc.plugins.comments.db.dao.CommentLikeDao
@@ -31,7 +33,8 @@ class GetRepliesAPI(
         summary = "The next replies of a comment, three at a time; lastId is the id of the last reply already shown.",
         tag = "comments",
         response = objectSchema()
-            .requiredProperty("items", arraySchema().items(CommentSchemas.comment(withReplies = false)))
+            .requiredProperty("items", arraySchema().items(CommentSchemas.comment(withReplies = false))),
+        errors = listOf(NotFound::class)
     )
 
     private val authProvider by lazy {
@@ -59,6 +62,14 @@ class GetRepliesAPI(
 
         val loggedIn = authProvider.isLoggedIn(context)
         val sqlClient = databaseManager.getSqlClient()
+
+        // Replies of a draft or trashed post stay hidden, like the post itself.
+        val parent = commentDao.getById(commentId, sqlClient) ?: throw NotFound()
+        val post = databaseManager.postDao.getById(parent.postId, sqlClient)
+        if (post == null || post.status != PostStatus.PUBLISHED) {
+            throw NotFound()
+        }
+
         val replies = commentDao.getRepliesByParentId(commentId, lastId, limit, sqlClient)
 
         val resultReplies = run {
