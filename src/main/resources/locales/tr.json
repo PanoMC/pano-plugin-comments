@@ -58,6 +58,9 @@
           "cancel": "İptal"
         }
       }
+    },
+    "toasts": {
+      "settings-save-error": "Ayarlar kaydedilemedi."
     }
   },
   "toasts": {

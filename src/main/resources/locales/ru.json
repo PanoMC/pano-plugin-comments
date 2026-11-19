@@ -58,6 +58,9 @@
                     "cancel": "Отмена"
                 }
             }
+        },
+        "toasts": {
+            "settings-save-error": "Не удалось сохранить настройки."
         }
     },
     "toasts": {

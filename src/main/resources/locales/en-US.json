@@ -58,6 +58,9 @@
           "cancel": "Cancel"
         }
       }
+    },
+    "toasts": {
+      "settings-save-error": "Settings could not be saved."
     }
   },
   "toasts": {
