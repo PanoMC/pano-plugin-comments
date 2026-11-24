@@ -212,7 +212,7 @@
       await showSuccessToast('components.toasts.settings-save-success');
     } catch (e) {
       console.error('Failed to save comment config', e);
-      await showErrorToast('components.toasts.settings-save-error');
+      await showErrorToast($_('components.toasts.settings-save-error'));
     } finally {
       saving = false;
     }

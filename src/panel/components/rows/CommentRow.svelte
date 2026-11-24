@@ -160,7 +160,7 @@
         width="32"
         height="32"
         alt={comment.username} />
-      {comment.username}
+      {comment.username ?? $_('common.unknown-user')}
     </a>
   </td>
   <td class="align-middle ps-2">
@@ -197,8 +197,7 @@
           on:click={toggleReplies}
           disabled={loadingReplies}>
           <i class="fas fa-caret-down me-2 caret-icon" class:open={showReplies}></i>
-          {comment.replyCount}
-          {$_('pages.comments.table.replies')}
+          {$_('pages.comments.table.reply-count', { values: { count: comment.replyCount } })}
         </button>
       {/if}
     </div>
@@ -272,7 +271,7 @@
             height="24"
             class="rounded-circle"
             alt={reply.username} />
-          <span class="small">{reply.username}</span>
+          <span class="small">{reply.username ?? $_('common.unknown-user')}</span>
         </a>
       </td>
       <td class="align-middle ps-2">

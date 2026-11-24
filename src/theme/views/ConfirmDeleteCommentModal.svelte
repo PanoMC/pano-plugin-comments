@@ -82,9 +82,12 @@
         callback(id);
         hide();
         showSuccessToast($_('toasts.delete-success'));
+      } else {
+        showErrorToast($_('toasts.delete-error'));
       }
     } catch (e) {
       console.error('Failed to delete comment', e);
+      showErrorToast($_('toasts.delete-error'));
     } finally {
       loading = false;
     }

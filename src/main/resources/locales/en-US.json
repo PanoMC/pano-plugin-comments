@@ -9,7 +9,7 @@
   "pages": {
     "comments": {
       "title": "Comments",
-      "table-title": "{commentCount} Comments",
+      "table-title": "{commentCount, plural, one {# comment} other {# comments}}",
       "table": {
         "id": "ID",
         "author": "Author",
@@ -24,9 +24,10 @@
         "no-comments": "No comments yet.",
         "copy-link": "Copy Link",
         "highlighted-comment": "Highlighted Comment",
-        "hidden-replies-above": "{count} replies hidden above",
-        "hidden-replies-below": "{count} replies hidden below",
-        "load-more-replies": "Load More Replies ({count})"
+        "hidden-replies-above": "{count, plural, one {# reply} other {# replies}} hidden above",
+        "hidden-replies-below": "{count, plural, one {# reply} other {# replies}} hidden below",
+        "load-more-replies": "Load More Replies ({count})",
+        "reply-count": "{count, plural, one {# reply} other {# replies}}"
       }
     }
   },
@@ -35,8 +36,6 @@
       "placeholder": "Share your comment...",
       "add-comment": "Add Comment",
       "send": "Send",
-      "just-now": "Just now",
-      "n-minutes-ago": "{count} minutes ago",
       "count": "Comments ({count})",
       "reply": "Reply",
       "like": "Like",
@@ -68,7 +67,8 @@
     "add-error": "Failed to add comment.",
     "delete-success": "Comment deleted successfully.",
     "copy-success": "Link copied successfully!",
-    "rate-limited": "Please wait before commenting again."
+    "rate-limited": "Please wait before commenting again.",
+    "delete-error": "Comment could not be deleted."
   },
   "permissions": {
     "MANAGE_COMMENTS": {
@@ -99,5 +99,8 @@
     "disabled": "Disabled",
     "comments-enabled-success": "Comments enabled successfully.",
     "comments-disabled-success": "Comments disabled successfully."
+  },
+  "common": {
+    "unknown-user": "Unknown"
   }
 }

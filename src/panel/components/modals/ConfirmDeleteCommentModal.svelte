@@ -58,7 +58,7 @@
 </script>
 
 <script>
-  import { _, showSuccessToast } from '../../../main';
+  import { _, showSuccessToast, showErrorToast } from '../../../main';
 
   let loading = false;
 
@@ -71,6 +71,7 @@
       });
       if (res.error) {
         console.error('Failed to delete comment', res.error);
+        showErrorToast($_('toasts.delete-error'));
       } else {
         callback(get(commentId));
         hide();
@@ -78,6 +79,7 @@
       }
     } catch (e) {
       console.error('Failed to delete comment', e);
+      showErrorToast($_('toasts.delete-error'));
     } finally {
       loading = false;
     }

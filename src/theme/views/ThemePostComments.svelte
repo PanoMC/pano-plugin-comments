@@ -332,6 +332,8 @@
 
       if (res.error?.code === 'RATE_LIMITED') {
         showErrorToast($_('toasts.rate-limited'));
+      } else if (res.error) {
+        showErrorToast($_('toasts.add-error'));
       }
     } catch (e) {
       console.error('Failed to add comment', e);

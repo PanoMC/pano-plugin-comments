@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-dialog-centered" role="dialog">
     <div class="modal-content">
       <div class="comments-add-comment-modal__header modal-header">
-        <h5 class="comments-add-comment-modal__title modal-title">{$_('pages.comments.title')}</h5>
+        <h5 class="comments-add-comment-modal__title modal-title">{$_('components.comments.add-comment')}</h5>
         <button type="button" class="btn-close" on:click={hide} aria-label={$_('components.comments.close')}></button>
       </div>
       <div class="comments-add-comment-modal__body modal-body">

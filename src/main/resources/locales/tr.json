@@ -26,7 +26,8 @@
         "copy-link": "Bağlantıyı Kopyala",
         "highlighted-comment": "Öne Çıkarılan Yorum",
         "hidden-replies-above": "{count} yanıt yukarıda gizlendi",
-        "hidden-replies-below": "{count} yanıt aşağıda gizlendi"
+        "hidden-replies-below": "{count} yanıt aşağıda gizlendi",
+        "reply-count": "{count} yanıt"
       }
     }
   },
@@ -35,18 +36,16 @@
       "placeholder": "Yorumunuzu paylaşın...",
       "add-comment": "Yorum Ekle",
       "send": "Gönder",
-      "just-now": "Az önce",
-      "n-minutes-ago": "{count} dakika önce",
       "count": "Yorumlar ({count})",
       "reply": "Yanıtla",
       "like": "Beğen",
       "reply-placeholder": "Yanıtınızı yazın...",
       "login-required": "Yorum yapmak için giriş yapmalısınız.",
       "no-permission": "Yorum yapmak için yetkiniz yok.",
-      "closed": "Bu gönderi için yorumlar kapatıldı.",
+      "closed": "Bu yazı için yorumlar kapatıldı.",
       "load-more-replies": "Daha Fazla Yanıt Yükle ({count})",
       "load-more": "Daha Fazla Yükle",
-      "no-comments": "Henüz yorum yapılmamış. İlk yorumu sen yap!",
+      "no-comments": "Henüz yorum yapılmamış. İlk yorumu siz yapın!",
       "close": "Kapat",
       "cancel": "İptal",
       "avatar_alt": "Avatar",
@@ -68,7 +67,8 @@
     "add-error": "Yorum eklenirken bir hata oluştu.",
     "delete-success": "Yorum başarıyla silindi.",
     "copy-success": "Bağlantı başarıyla kopyalandı!",
-    "rate-limited": "Tekrar yorum yapmadan önce lütfen bekleyin."
+    "rate-limited": "Tekrar yorum yapmadan önce lütfen bekleyin.",
+    "delete-error": "Yorum silinemedi."
   },
   "permissions": {
     "MANAGE_COMMENTS": {
@@ -79,9 +79,9 @@
   "settings": {
     "title": "Tercihler",
     "replies-enabled": "Yanıtları Etkinleştir",
-    "replies-enabled-desc": "Kullanıcıların yorumlara yanıt vermesine izin ver",
+    "replies-enabled-desc": "Kullanıcıların yorumlara yanıt vermesine izin verir",
     "likes-enabled": "Beğenileri Etkinleştir",
-    "likes-enabled-desc": "Kullanıcıların yorumları beğenmesine izin ver",
+    "likes-enabled-desc": "Kullanıcıların yorumları beğenmesine izin verir",
     "pagination-type": "Sayfalama Türü",
     "pagination-classic": "Klasik Sayfalama",
     "pagination-load-more": "Daha Fazla Yükle",
@@ -92,12 +92,15 @@
     "cooldown": "Bekleme Süresi (Saniye)",
     "cooldown-desc": "Yorumlar arasındaki minimum süre (saniye cinsinden)",
     "input-style": "Giriş Stili",
-    "input-style-modal": "Modal (Pencere)",
-    "input-style-inline": "Satır İçi (Inline)",
+    "input-style-modal": "Açılır Pencere",
+    "input-style-inline": "Satır İçi",
     "comments-enabled": "Yorumları Etkinleştir",
     "enabled": "Etkin",
     "disabled": "Devre Dışı",
     "comments-enabled-success": "Yorumlar başarıyla etkinleştirildi.",
     "comments-disabled-success": "Yorumlar başarıyla devre dışı bırakıldı."
+  },
+  "common": {
+    "unknown-user": "Bilinmiyor"
   }
 }

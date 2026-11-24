@@ -102,7 +102,7 @@ class PanelGetPlayerCommentsAPI(
             "id" to comment.id,
             "postId" to comment.postId,
             "userId" to comment.userId,
-            "username" to (username ?: "Unknown"),
+            "username" to username,
             "content" to comment.content,
             "likes" to comment.likes,
             "parentId" to comment.parentId,
